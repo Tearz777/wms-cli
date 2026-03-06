@@ -143,3 +143,17 @@ ERP CLI
 ↓
 
 Web ERP
+
+
+## Changelog
+
+### v1.0
+- Initial CLI warehouse management system
+- Stock in / stock out
+- Restock alert
+- CLI menu system
+
+### v2.0 (in progress)
+- JSON database persistence
+- Auto load / save database
+- Inventory stored locally
