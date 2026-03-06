@@ -157,3 +157,9 @@ Web ERP
 - JSON database persistence
 - Auto load / save database
 - Inventory stored locally
+
+## Screenshot
+
+Example CLI interface:
+
+![WMS CLI Screenshot](screenshot.png)
