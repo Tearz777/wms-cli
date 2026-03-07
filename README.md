@@ -153,10 +153,19 @@ Web ERP
 - Restock alert
 - CLI menu system
 
-### v2.0 (in progress)
+### v2.0
 - JSON database persistence
 - Auto load / save database
 - Inventory stored locally
+
+### v2.5 (in progress)
+- Code refactoring
+- Renamed functions to descriptive names
+- Renamed variables to descriptive names
+- Wrapped main loop into main() function
+- Fixed logic bug in barang_keluar()
+- Added if __name__ == "__main__" guard
+- Added os.system("clear") for cleaner CLI display
 
 ## Screenshot
 
