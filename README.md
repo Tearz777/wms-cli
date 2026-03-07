@@ -41,21 +41,23 @@ datetime
 ---
 
 Project Structure
-
+`````
 python-wms-cli/
-
 │
-
-├── wms_cli_v2.py
-
-├── WMS_db.json
-
-└── README.md
-
-- wms_cli_v2.py → main application
-- WMS_db.json → local database
-- README.md → project documentation
-
+├── notebooks/
+├── src/
+│   ├── v1/
+│   │   └── wms_cli_v1.py
+│   └── v2/
+│       ├── wms_cli_v2.0.py
+│       └── wms_cli_v2_5.py
+├── database/
+│   └── wms_db.json
+├── README.md
+├── .gitignore
+├── LICENSE
+└── screenshot.png
+`````
 ---
 
 ## Database Structure
@@ -129,21 +131,27 @@ Background:
 This project is part of a long-term goal to build a lightweight ERP system for small businesses and UMKM.
 
 Starting from:
-
+```
 Inventory System
-
 ↓
-
 POS System
-
 ↓
-
 ERP CLI
-
 ↓
-
 Web ERP
+```
 
+### Planned upgrades:
+
+- [ ] Transaction logging dengan timestamp
+- [ ] Owner / kasir access control
+- [ ] POS CLI integration (v3.0)
+- [ ] Daily sales reports
+- [ ] Hutang / piutang tracking
+- [ ] Inventory analytics
+- [ ] ERP CLI
+- [ ] Web ERP (Flask/Django)
+---
 
 ## Changelog
 
@@ -158,7 +166,7 @@ Web ERP
 - Auto load / save database
 - Inventory stored locally
 
-### v2.5 (in progress)
+### v2.5
 - Code refactoring
 - Renamed functions to descriptive names
 - Renamed variables to descriptive names
@@ -166,6 +174,11 @@ Web ERP
 - Fixed logic bug in barang_keluar()
 - Added if __name__ == "__main__" guard
 - Added os.system("clear") for cleaner CLI display
+
+### v3.0 (On Progress)
+- POS CLI integration
+- Transaction logging
+- Daily sales summary
 
 ## Screenshot
 
