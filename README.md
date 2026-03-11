@@ -92,7 +92,8 @@ python-wms-cli/
     "pengeluaran_bulanan": 1,
     "hari_aktif": "",
     "minggu_aktif": "",
-    "bulan_aktif": ""
+    "bulan_aktif": "",
+    "tahun_aktif": ""
   },
   "pemasukan": {},
   "pengeluaran": {}
@@ -120,8 +121,8 @@ Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ
 | `YYDDMM` | Year-Day-Month (deliberately reversed — anti-fraud) |
 | `MMHH` | Minute-Hour (deliberately reversed — anti-fraud) |
 | `XXX` | Daily counter (resets every day) |
-| `YYY` | Weekly counter (resets every week) |
-| `ZZZ` | Monthly counter (resets every month) |
+| `YYY` | Weekly counter (resets every moth) |
+| `ZZZ` | Monthly counter (rests every year) |
 
 All three counters are **independent** of each other.
 
@@ -165,11 +166,11 @@ POS v1.0     ✅ Stable
 ```
 
 ### Detailed Backlog
-- [ ] `simpan_transaksi()` universal function (v1.5)
-- [ ] Separate counters for pemasukan & pengeluaran (v1.5 bugfix)
+- [v] `simpan_transaksi()` universal function (v1.5)
+- [v] Separate counters for pemasukan & pengeluaran (v1.5 bugfix)
 - [ ] Price lookup from DB_HARGA (v2.0)
 - [ ] NTP time server — Surabaya timezone (v2.0)
-- [ ] Daily sales report / Laporan Harian (v2.0)
+- [v] Daily sales report / Laporan Harian (v2.0)
 - [ ] Beverage variants — container & size pricing (v3.0)
 - [ ] Consignment tracking — martabak, cenil, jajan 2k, etc. (v3.1/v3.2)
 - [ ] WMS auto stock deduction on POS sale (POS+WMS v1)
@@ -178,6 +179,12 @@ POS v1.0     ✅ Stable
 ---
 
 ## Changelog
+
+### POS v1.5
+- Refactor: simpan_transaksi() universal → save_trx()
+- Fix counter reset bug: mingguan reset tiap ganti bulan, bulanan reset tiap ganti tahun
+- Tambah tahun_aktif di counter DB
+- Daily Report (Laporan Harian) — jumlah transaksi, item terlaris, list pengeluaran, laba kotor
 
 ### POS v1.0
 - Income recording (Pemasukan) with multi-item support
