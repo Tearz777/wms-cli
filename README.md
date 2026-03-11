@@ -166,11 +166,11 @@ POS v1.0     ✅ Stable
 ```
 
 ### Detailed Backlog
-- [v] `simpan_transaksi()` universal function (v1.5)
-- [v] Separate counters for pemasukan & pengeluaran (v1.5 bugfix)
+- [x] `simpan_transaksi()` universal function (v1.5)
+- [x] Separate counters for pemasukan & pengeluaran (v1.5 bugfix)
 - [ ] Price lookup from DB_HARGA (v2.0)
 - [ ] NTP time server — Surabaya timezone (v2.0)
-- [v] Daily sales report / Laporan Harian (v2.0)
+- [x] Daily sales report / Laporan Harian (v2.0)
 - [ ] Beverage variants — container & size pricing (v3.0)
 - [ ] Consignment tracking — martabak, cenil, jajan 2k, etc. (v3.1/v3.2)
 - [ ] WMS auto stock deduction on POS sale (POS+WMS v1)
