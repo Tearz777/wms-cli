@@ -3,24 +3,51 @@
         "pemasukan_harian": 4,
         "pemasukan_mingguan": 4,
         "pemasukan_bulanan": 4,
-        "pengeluaran_harian": 2,
-        "pengeluaran_mingguan": 2,
-        "pengeluaran_bulanan": 2,
-        "hari_aktif": "11",
+        "pengeluaran_harian": 3,
+        "pengeluaran_mingguan": 3,
+        "pengeluaran_bulanan": 3,
+        "hari_aktif": "12",
         "minggu_aktif": "10",
-        "bulan_aktif": "03"
+        "bulan_aktif": "03",
+        "tahun_aktif": "2026"
     },
     "pemasukan": {
-        "TRX-261103-3511-001-001-001": {
-            "tanggal": "2026-03-11",
-            "waktu": "11:35",
+        "TRX-261203-2201-001-001-001": {
+            "tanggal": "2026-03-12",
+            "waktu": "01:22",
             "items": [
                 {
                     "Nama": "kopi",
-                    "Qty": 5,
+                    "Qty": 3,
                     "Harga": 5000,
-                    "Total": 25000
+                    "Total": 15000
+                }
+            ],
+            "total": 15000
+        },
+        "TRX-261203-2301-002-002-002": {
+            "tanggal": "2026-03-12",
+            "waktu": "01:23",
+            "items": [
+                {
+                    "Nama": "teh",
+                    "Qty": 2,
+                    "Harga": 3000,
+                    "Total": 6000
                 },
+                {
+                    "Nama": "susu",
+                    "Qty": 1,
+                    "Harga": 7000,
+                    "Total": 7000
+                }
+            ],
+            "total": 13000
+        },
+        "TRX-261203-2301-003-003-003": {
+            "tanggal": "2026-03-12",
+            "waktu": "01:23",
+            "items": [
                 {
                     "Nama": "oreo",
                     "Qty": 5,
@@ -28,53 +55,33 @@
                     "Total": 10000
                 }
             ],
-            "total": 35000
-        },
-        "TRX-261103-4411-002-002-002": {
-            "tanggal": "2026-03-11",
-            "waktu": "11:44",
-            "items": [
-                {
-                    "Nama": "kopi",
-                    "Qty": 4,
-                    "Harga": 5000,
-                    "Total": 20000
-                }
-            ],
-            "total": 20000
-        },
-        "TRX-261103-4711-003-003-003": {
-            "tanggal": "2026-03-11",
-            "waktu": "11:47",
-            "items": [
-                {
-                    "Nama": "es teh",
-                    "Qty": 2,
-                    "Harga": 5000,
-                    "Total": 10000
-                },
-                {
-                    "Nama": "kerupuk",
-                    "Qty": 2,
-                    "Harga": 500,
-                    "Total": 1000
-                }
-            ],
-            "total": 11000
+            "total": 10000
         }
     },
     "pengeluaran": {
-        "TRXK-261103-3911-001-001-001": {
-            "tanggal": "2026-03-11",
-            "waktu": "11:39",
+        "TRXK-261203-2401-001-001-001": {
+            "tanggal": "2026-03-12",
+            "waktu": "01:24",
             "items": [
                 {
-                    "Tujuan": "Bayar Jajan 2k",
-                    "Nominal": 40000,
-                    "Kategori": "Bayar Konsinyasi"
+                    "Tujuan": "Beli Gas",
+                    "Nominal": 15000,
+                    "Kategori": "Operasional"
                 }
             ],
-            "total": 40000
+            "total": 15000
+        },
+        "TRXK-261203-2401-002-002-002": {
+            "tanggal": "2026-03-12",
+            "waktu": "01:24",
+            "items": [
+                {
+                    "Tujuan": "Makan Karyawan",
+                    "Nominal": 10000,
+                    "Kategori": "Makan Karyawan"
+                }
+            ],
+            "total": 10000
         }
     }
 }
