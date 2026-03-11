@@ -1,0 +1,80 @@
+{
+    "counter": {
+        "pemasukan_harian": 4,
+        "pemasukan_mingguan": 4,
+        "pemasukan_bulanan": 4,
+        "pengeluaran_harian": 2,
+        "pengeluaran_mingguan": 2,
+        "pengeluaran_bulanan": 2,
+        "hari_aktif": "11",
+        "minggu_aktif": "10",
+        "bulan_aktif": "03"
+    },
+    "pemasukan": {
+        "TRX-261103-3511-001-001-001": {
+            "tanggal": "2026-03-11",
+            "waktu": "11:35",
+            "items": [
+                {
+                    "Nama": "kopi",
+                    "Qty": 5,
+                    "Harga": 5000,
+                    "Total": 25000
+                },
+                {
+                    "Nama": "oreo",
+                    "Qty": 5,
+                    "Harga": 2000,
+                    "Total": 10000
+                }
+            ],
+            "total": 35000
+        },
+        "TRX-261103-4411-002-002-002": {
+            "tanggal": "2026-03-11",
+            "waktu": "11:44",
+            "items": [
+                {
+                    "Nama": "kopi",
+                    "Qty": 4,
+                    "Harga": 5000,
+                    "Total": 20000
+                }
+            ],
+            "total": 20000
+        },
+        "TRX-261103-4711-003-003-003": {
+            "tanggal": "2026-03-11",
+            "waktu": "11:47",
+            "items": [
+                {
+                    "Nama": "es teh",
+                    "Qty": 2,
+                    "Harga": 5000,
+                    "Total": 10000
+                },
+                {
+                    "Nama": "kerupuk",
+                    "Qty": 2,
+                    "Harga": 500,
+                    "Total": 1000
+                }
+            ],
+            "total": 11000
+        }
+    },
+    "pengeluaran": {
+        "TRXK-261103-3911-001-001-001": {
+            "tanggal": "2026-03-11",
+            "waktu": "11:39",
+            "items": [
+                {
+                    "Tujuan": "Bayar Jajan 2k",
+                    "Nominal": 40000,
+                    "Kategori": "Bayar Konsinyasi"
+                }
+            ],
+            "total": 40000
+        }
+    }
+}
