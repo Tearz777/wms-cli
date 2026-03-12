@@ -19,13 +19,15 @@ Developed from real warung operational needs — focused on simplicity, local da
 - 🖥️ CLI menu interface
 - 🛠️ Input validation
 
-### POS (v1.0 — Stable)
+### POS (v1.5 — Stable)
 - 🧾 Income recording (Pemasukan)
 - 💸 Expense recording (Pengeluaran) with categories
 - 🔢 Unique transaction ID system (anti-fraud timestamp encoding)
 - 📊 Independent daily / weekly / monthly counters
+- 📋 Daily report — transactions, top item, expense list, gross profit
 - 💾 JSON-based transaction database
 - 🛠️ Input validation with price sanity check
+- ♻️ Universal save function `save_trx()`
 
 ---
 
@@ -52,7 +54,8 @@ python-wms-cli/
 │   │       └── wms_cli_v2_5.py          ← stable
 │   ├── POS/
 │   │   └── v1/
-│   │       └── pos_cli_v1.py            ← stable
+│   │       ├── pos_cli_v1.py
+│   │       └── pos_cli_v1_5.py          ← stable
 │   └── POS+WMS/
 │       ├── v1/
 │       ├── v2/
@@ -121,8 +124,8 @@ Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ
 | `YYDDMM` | Year-Day-Month (deliberately reversed — anti-fraud) |
 | `MMHH` | Minute-Hour (deliberately reversed — anti-fraud) |
 | `XXX` | Daily counter (resets every day) |
-| `YYY` | Weekly counter (resets every moth) |
-| `ZZZ` | Monthly counter (rests every year) |
+| `YYY` | Weekly counter (resets every month) |
+| `ZZZ` | Monthly counter (resets every year) |
 
 All three counters are **independent** of each other.
 
@@ -139,7 +142,7 @@ python wms_cli_v2_5.py
 ### POS
 ```bash
 cd src/POS/v1
-python pos_cli_v1.py
+python pos_cli_v1_5.py
 ```
 
 > Make sure the `database/` folder exists at `../../database/` relative to the script, or adjust the path in the source file.
@@ -151,8 +154,8 @@ python pos_cli_v1.py
 ```
 WMS v2.5     ✅ Stable
 POS v1.0     ✅ Stable
+POS v1.5     ✅ Stable
     │
-    ├── POS v1.5   → Refactor: universal simpan_transaksi(), fix shared counter bug
     ├── POS v2.0   → Price lookup from DB_HARGA + Surabaya time server (anti-fraud)
     ├── POS v3.0   → Beverage container/size variations
     ├── POS v3.1   → Consignment tracking (input)
@@ -248,13 +251,15 @@ Dikembangkan dari kebutuhan operasional warung nyata — fokus pada kesederhanaa
 - 🖥️ Antarmuka menu CLI
 - 🛠️ Validasi input
 
-### POS (v1.0 — Stabil)
+### POS (v1.5 — Stabil)
 - 🧾 Pencatatan pemasukan (multi-item)
 - 💸 Pencatatan pengeluaran dengan kategori
 - 🔢 Format ID transaksi unik (timestamp dibalik — anti-fraud)
 - 📊 Counter harian / mingguan / bulanan yang independen
+- 📋 Laporan harian — transaksi, item terlaris, list pengeluaran, laba kotor
 - 💾 Database transaksi berbasis JSON
 - 🛠️ Validasi input + cek harga terlalu rendah
+- ♻️ Fungsi simpan universal `save_trx()`
 
 ---
 
@@ -281,7 +286,8 @@ python-wms-cli/
 │   │       └── wms_cli_v2_5.py          ← stabil
 │   ├── POS/
 │   │   └── v1/
-│   │       └── pos_cli_v1.py            ← stabil
+│   │       ├── pos_cli_v1.py
+│   │       └── pos_cli_v1_5.py          ← stabil
 │   └── POS+WMS/
 │       ├── v1/
 │       ├── v2/
@@ -311,8 +317,8 @@ Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ
 | `YYDDMM` | Tahun-Tanggal-Bulan (sengaja dibalik — anti-fraud) |
 | `MMHH` | Menit-Jam (sengaja dibalik — anti-fraud) |
 | `XXX` | Counter harian (reset tiap hari) |
-| `YYY` | Counter mingguan (reset tiap minggu) |
-| `ZZZ` | Counter bulanan (reset tiap bulan) |
+| `YYY` | Counter mingguan (reset tiap ganti bulan) |
+| `ZZZ` | Counter bulanan (reset tiap ganti tahun) |
 
 Ketiga counter **independen** satu sama lain.
 
@@ -329,7 +335,7 @@ python wms_cli_v2_5.py
 ### POS
 ```bash
 cd src/POS/v1
-python pos_cli_v1.py
+python pos_cli_v1_5.py
 ```
 
 > Pastikan folder `database/` ada di `../../database/` relatif terhadap script, atau sesuaikan path di source code.
@@ -341,8 +347,8 @@ python pos_cli_v1.py
 ```
 WMS v2.5     ✅ Selesai
 POS v1.0     ✅ Selesai
+POS v1.5     ✅ Selesai
     │
-    ├── POS v1.5   → Refactor: simpan_transaksi() universal, fix bug counter
     ├── POS v2.0   → Lookup harga dari DB_HARGA + time server Surabaya
     ├── POS v3.0   → Variasi wadah & ukuran minuman
     ├── POS v3.1   → Tracking konsinyasi (input)
@@ -358,6 +364,12 @@ POS v1.0     ✅ Selesai
 ---
 
 ## Changelog
+
+### POS v1.5
+- Refactor: `save_trx()` universal menggantikan kode simpan yang panjang
+- Fix bug counter reset: mingguan reset tiap ganti bulan, bulanan reset tiap ganti tahun
+- Tambah `tahun_aktif` di struktur counter DB
+- Laporan Harian: jumlah transaksi, item terlaris, list pengeluaran, laba kotor
 
 ### POS v1.0
 - Pencatatan pemasukan multi-item
