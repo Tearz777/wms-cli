@@ -1,3 +1,229 @@
 {
-    "produk": {}
+    "produk": {
+        "flex": {
+            "tembok flex ss": {
+                "harga": 61000,
+                "satuan": "set"
+            },
+            "tembok flex putih": {
+                "harga": 91000,
+                "satuan": "set"
+            },
+            "meja flex ss": {
+                "harga": 76000,
+                "satuan": "set"
+            },
+            "meja flex cm": {
+                "harga": 73000,
+                "satuan": "set"
+            }
+        },
+        "kran": {
+            "taman pvc hijau": {
+                "harga": 43000,
+                "satuan": "pcs"
+            },
+            "taman pvc biru": {
+                "harga": 28000,
+                "satuan": "pcs"
+            },
+            "taman pvc putih": {
+                "harga": 39000,
+                "satuan": "pcs"
+            },
+            "taman pvc coklat": {
+                "harga": 39000,
+                "satuan": "pcs"
+            },
+            "taman pvc orange": {
+                "harga": 23000,
+                "satuan": "pcs"
+            },
+            "taman panjang cm": {
+                "harga": 49000,
+                "satuan": "pcs"
+            },
+            "taman baling": {
+                "harga": 45000,
+                "satuan": "pcs"
+            },
+            "angsa baling": {
+                "harga": 46000,
+                "satuan": "pcs"
+            },
+            "angsa ikan": {
+                "harga": 47000,
+                "satuan": "pcs"
+            },
+            "jet putih": {
+                "harga": 44000,
+                "satuan": "pcs"
+            },
+            "mandi 1/2 cm": {
+                "harga": 39000,
+                "satuan": "pcs"
+            },
+            "mandi tumpul 3/4 cm": {
+                "harga": 33000,
+                "satuan": "pcs"
+            },
+            "cabang tumpul": {
+                "harga": 40000,
+                "satuan": "pcs"
+            },
+            "cabang baling": {
+                "harga": 27000,
+                "satuan": "pcs"
+            }
+        },
+        "fitting": {
+            "nepel 1/2 x 3/4": {
+                "harga": 5000,
+                "satuan": "pcs"
+            },
+            "obeng 10-16": {
+                "harga": 3000,
+                "satuan": "pcs"
+            },
+            "obeng 13-19": {
+                "harga": 4000,
+                "satuan": "pcs"
+            },
+            "obeng 16-25": {
+                "harga": 2000,
+                "satuan": "pcs"
+            },
+            "obeng 18-32": {
+                "harga": 1000,
+                "satuan": "pcs"
+            },
+            "obeng 21-38": {
+                "harga": 5000,
+                "satuan": "pcs"
+            },
+            "obeng 21-44": {
+                "harga": 4000,
+                "satuan": "pcs"
+            },
+            "obeng 27-51": {
+                "harga": 3000,
+                "satuan": "pcs"
+            },
+            "obeng 38-57": {
+                "harga": 2000,
+                "satuan": "pcs"
+            },
+            "obeng 40-64": {
+                "harga": 3000,
+                "satuan": "pcs"
+            },
+            "obeng 52-76": {
+                "harga": 1000,
+                "satuan": "pcs"
+            },
+            "obeng 65-89": {
+                "harga": 1000,
+                "satuan": "pcs"
+            },
+            "obeng 73-101": {
+                "harga": 4000,
+                "satuan": "pcs"
+            }
+        },
+        "ties": {
+            "ties 10 hitam": {
+                "harga": 15000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 10 putih": {
+                "harga": 9000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 15 hitam": {
+                "harga": 8000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 15 putih": {
+                "harga": 7000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 20 hitam": {
+                "harga": 11000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 20 putih": {
+                "harga": 7000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 25 hitam": {
+                "harga": 12000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 25 putih": {
+                "harga": 6000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 30 hitam": {
+                "harga": 6000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 30 putih": {
+                "harga": 12000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 30 hitam jumbo": {
+                "harga": 15000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ties 30 putih jumbo": {
+                "harga": 12000,
+                "satuan": "pack",
+                "isi": 100
+            }
+        },
+        "elektronik": {
+            "media a": {
+                "harga": 125000,
+                "satuan": "pcs"
+            },
+            "media b": {
+                "harga": 114000,
+                "satuan": "pcs"
+            },
+            "media set": {
+                "harga": 144000,
+                "satuan": "set"
+            }
+        },
+        "lainnya": {
+            "nail pink": {
+                "harga": 23000,
+                "satuan": "pcs"
+            },
+            "fisher ecer": {
+                "harga": 6000,
+                "satuan": "pcs"
+            },
+            "fisher pack": {
+                "harga": 69000,
+                "satuan": "pack",
+                "isi": 100
+            },
+            "ph meter": {
+                "harga": 69000,
+                "satuan": "pcs"
+            }
+        }
+    }
 }
