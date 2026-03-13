@@ -19,12 +19,15 @@ Developed from real warung operational needs — focused on simplicity, local da
 - 🖥️ CLI menu interface
 - 🛠️ Input validation
 
-### POS (v1.5 — Stable)
+### POS (v1.6 — Stable)
 - 🧾 Income recording (Pemasukan)
 - 💸 Expense recording (Pengeluaran) with categories
 - 🔢 Unique transaction ID system (anti-fraud timestamp encoding)
 - 📊 Independent daily / weekly / monthly counters
 - 📋 Daily report — transactions, top item, expense list, gross profit
+- 🕐 NTP time server — Surabaya timezone (anti-fraud timestamp)
+- 🔍 Sales detail lookup by date
+- 📦 Item recap per day — sorted by quantity
 - 💾 JSON-based transaction database
 - 🛠️ Input validation with price sanity check
 - ♻️ Universal save function `save_trx()`
@@ -35,7 +38,7 @@ Developed from real warung operational needs — focused on simplicity, local da
 
 - **Language:** Python 3.12
 - **Database:** JSON (local flat-file)
-- **Dependencies:** Standard library only — `os`, `json`, `datetime`
+- **Dependencies:** `os`, `json`, `datetime`, `ntplib`
 - **Environment:** Termux (Android) / Any Python 3.x terminal
 
 ---
@@ -55,7 +58,8 @@ python-wms-cli/
 │   ├── POS/
 │   │   └── v1/
 │   │       ├── pos_cli_v1.py
-│   │       └── pos_cli_v1_5.py          ← stable
+│   │       ├── pos_cli_v1_5.py
+│   │       └── pos_cli_v1_6.py          ← stable
 │   └── POS+WMS/
 │       ├── v1/
 │       ├── v2/
@@ -103,7 +107,7 @@ python-wms-cli/
 }
 ```
 
-### DB_HARGA.json *(used in POS v2+)*
+### DB_HARGA.json *(used in POS v1.7+)*
 ```json
 {
   "produk": {}
@@ -129,6 +133,8 @@ Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ
 
 All three counters are **independent** of each other.
 
+Timestamps are sourced from NTP server (`id.pool.ntp.org`) with fallback to local clock if offline. Each transaction records `sumber_waktu: "NTP"` or `"LOKAL"` for audit purposes.
+
 ---
 
 ## How to Run
@@ -142,7 +148,7 @@ python wms_cli_v2_5.py
 ### POS
 ```bash
 cd src/POS/v1
-python pos_cli_v1_5.py
+python pos_cli_v1_6.py
 ```
 
 > Make sure the `database/` folder exists at `../../database/` relative to the script, or adjust the path in the source file.
@@ -155,13 +161,12 @@ python pos_cli_v1_5.py
 WMS v2.5     ✅ Stable
 POS v1.0     ✅ Stable
 POS v1.5     ✅ Stable
+POS v1.6     ✅ Stable
     │
-    ├── POS v2.0   → Price lookup from DB_HARGA + Surabaya time server (anti-fraud)
-    ├── POS v3.0   → Beverage container/size variations
-    ├── POS v3.1   → Consignment tracking (input)
-    ├── POS v3.2   → Consignment payment & reporting
+    ├── POS v1.7   → Submenu Transaksi & Laporan, price lookup from DB_HARGA
+    ├── POS v1.8   → Beverage variants + consignment tracking & payment
     │
-    ├── POS+WMS v1 → Integration: stock auto-deduct on sale
+    ├── POS+WMS v2.0 → Integration: stock auto-deduct on sale, modular architecture
     │
     ├── ERP CLI    → Combined: financial reports, hutang/piutang, restock alerts
     │
@@ -171,17 +176,27 @@ POS v1.5     ✅ Stable
 ### Detailed Backlog
 - [x] `simpan_transaksi()` universal function (v1.5)
 - [x] Separate counters for pemasukan & pengeluaran (v1.5 bugfix)
-- [ ] Price lookup from DB_HARGA (v2.0)
-- [ ] NTP time server — Surabaya timezone (v2.0)
-- [x] Daily sales report / Laporan Harian (v2.0)
-- [ ] Beverage variants — container & size pricing (v3.0)
-- [ ] Consignment tracking — martabak, cenil, jajan 2k, etc. (v3.1/v3.2)
-- [ ] WMS auto stock deduction on POS sale (POS+WMS v1)
+- [x] Daily sales report / Laporan Harian (v1.5)
+- [x] NTP time server — Surabaya timezone (v1.6)
+- [x] Sales detail lookup by date (v1.6)
+- [x] Item recap per day (v1.6)
+- [ ] Submenu Transaksi & Laporan (v1.7)
+- [ ] Price lookup from DB_HARGA (v1.7)
+- [ ] Beverage variants + consignment tracking & payment (v1.8)
+- [ ] WMS auto stock deduction on POS sale (POS+WMS v2.0)
+- [ ] Modular architecture — split into multiple .py files (v2.0)
 - [ ] Owner vs kasir role access (Web ERP)
 
 ---
 
 ## Changelog
+
+### POS v1.6
+- NTP time server integration (`id.pool.ntp.org`) — Surabaya timezone (WIB UTC+7)
+- Fallback to local clock if NTP unavailable + warning display
+- `sumber_waktu` field added to every transaction (NTP / LOKAL)
+- Sales detail — lookup penjualan by date with per-transaction breakdown
+- Item recap — all items sold per day, sorted by quantity
 
 ### POS v1.5
 - Refactor: simpan_transaksi() universal → save_trx()
@@ -251,12 +266,15 @@ Dikembangkan dari kebutuhan operasional warung nyata — fokus pada kesederhanaa
 - 🖥️ Antarmuka menu CLI
 - 🛠️ Validasi input
 
-### POS (v1.5 — Stabil)
+### POS (v1.6 — Stabil)
 - 🧾 Pencatatan pemasukan (multi-item)
 - 💸 Pencatatan pengeluaran dengan kategori
 - 🔢 Format ID transaksi unik (timestamp dibalik — anti-fraud)
 - 📊 Counter harian / mingguan / bulanan yang independen
 - 📋 Laporan harian — transaksi, item terlaris, list pengeluaran, laba kotor
+- 🕐 NTP time server — timezone Surabaya (anti-fraud timestamp)
+- 🔍 Detail penjualan — lookup berdasarkan tanggal
+- 📦 Rekap item per hari — diurutkan dari terbanyak
 - 💾 Database transaksi berbasis JSON
 - 🛠️ Validasi input + cek harga terlalu rendah
 - ♻️ Fungsi simpan universal `save_trx()`
@@ -267,7 +285,7 @@ Dikembangkan dari kebutuhan operasional warung nyata — fokus pada kesederhanaa
 
 - **Bahasa:** Python 3.12
 - **Database:** JSON (flat-file lokal)
-- **Dependensi:** Standard library saja — `os`, `json`, `datetime`
+- **Dependensi:** `os`, `json`, `datetime`, `ntplib`
 - **Environment:** Termux (Android) / Terminal Python 3.x manapun
 
 ---
@@ -287,7 +305,8 @@ python-wms-cli/
 │   ├── POS/
 │   │   └── v1/
 │   │       ├── pos_cli_v1.py
-│   │       └── pos_cli_v1_5.py          ← stabil
+│   │       ├── pos_cli_v1_5.py
+│   │       └── pos_cli_v1_6.py          ← stabil
 │   └── POS+WMS/
 │       ├── v1/
 │       ├── v2/
@@ -322,6 +341,8 @@ Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ
 
 Ketiga counter **independen** satu sama lain.
 
+Timestamp diambil dari NTP server (`id.pool.ntp.org`) dengan fallback ke clock lokal jika offline. Setiap transaksi menyimpan field `sumber_waktu: "NTP"` atau `"LOKAL"` untuk keperluan audit.
+
 ---
 
 ## Cara Menjalankan
@@ -335,7 +356,7 @@ python wms_cli_v2_5.py
 ### POS
 ```bash
 cd src/POS/v1
-python pos_cli_v1_5.py
+python pos_cli_v1_6.py
 ```
 
 > Pastikan folder `database/` ada di `../../database/` relatif terhadap script, atau sesuaikan path di source code.
@@ -348,13 +369,12 @@ python pos_cli_v1_5.py
 WMS v2.5     ✅ Selesai
 POS v1.0     ✅ Selesai
 POS v1.5     ✅ Selesai
+POS v1.6     ✅ Selesai
     │
-    ├── POS v2.0   → Lookup harga dari DB_HARGA + time server Surabaya
-    ├── POS v3.0   → Variasi wadah & ukuran minuman
-    ├── POS v3.1   → Tracking konsinyasi (input)
-    ├── POS v3.2   → Pembayaran & laporan konsinyasi
+    ├── POS v1.7   → Submenu Transaksi & Laporan, lookup harga DB_HARGA
+    ├── POS v1.8   → Variasi wadah minuman + tracking & pembayaran konsinyasi
     │
-    ├── POS+WMS v1 → Integrasi: stok auto berkurang saat transaksi POS
+    ├── POS+WMS v2.0 → Integrasi WMS, stok auto berkurang, arsitektur modular
     │
     ├── ERP CLI    → Gabung semua: laporan keuangan, hutang/piutang, alert restock
     │
@@ -364,6 +384,13 @@ POS v1.5     ✅ Selesai
 ---
 
 ## Changelog
+
+### POS v1.6
+- Integrasi NTP time server (`id.pool.ntp.org`) — timezone WIB (UTC+7)
+- Fallback ke clock lokal jika NTP tidak tersedia + tampilkan warning
+- Field `sumber_waktu` ditambahkan ke setiap transaksi (NTP / LOKAL)
+- Detail penjualan — lookup berdasarkan tanggal dengan breakdown per transaksi
+- Rekap item — semua item terjual per hari, diurutkan dari terbanyak
 
 ### POS v1.5
 - Refactor: `save_trx()` universal menggantikan kode simpan yang panjang
