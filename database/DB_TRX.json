@@ -1,11 +1,11 @@
 {
     "counter": {
-        "pemasukan_harian": 4,
-        "pemasukan_mingguan": 4,
-        "pemasukan_bulanan": 4,
-        "pengeluaran_harian": 3,
-        "pengeluaran_mingguan": 3,
-        "pengeluaran_bulanan": 3,
+        "pemasukan_harian": 6,
+        "pemasukan_mingguan": 6,
+        "pemasukan_bulanan": 6,
+        "pengeluaran_harian": 5,
+        "pengeluaran_mingguan": 5,
+        "pengeluaran_bulanan": 5,
         "hari_aktif": "12",
         "minggu_aktif": "10",
         "bulan_aktif": "03",
@@ -56,6 +56,40 @@
                 }
             ],
             "total": 10000
+        },
+        "TRX-261203-3118-004-004-004": {
+            "tanggal": "2026-03-12",
+            "waktu": "18:31",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Nama": "kopi",
+                    "Qty": 5,
+                    "Harga": 5000,
+                    "Total": 25000
+                }
+            ],
+            "total": 25000
+        },
+        "TRX-261203-3318-005-005-005": {
+            "tanggal": "2026-03-12",
+            "waktu": "18:33",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Nama": "susu",
+                    "Qty": 2,
+                    "Harga": 7000,
+                    "Total": 14000
+                },
+                {
+                    "Nama": "mie instan",
+                    "Qty": 2,
+                    "Harga": 4000,
+                    "Total": 8000
+                }
+            ],
+            "total": 22000
         }
     },
     "pengeluaran": {
@@ -74,6 +108,32 @@
         "TRXK-261203-2401-002-002-002": {
             "tanggal": "2026-03-12",
             "waktu": "01:24",
+            "items": [
+                {
+                    "Tujuan": "Makan Karyawan",
+                    "Nominal": 10000,
+                    "Kategori": "Makan Karyawan"
+                }
+            ],
+            "total": 10000
+        },
+        "TRXK-261203-3418-003-003-003": {
+            "tanggal": "2026-03-12",
+            "waktu": "18:34",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Tujuan": "Beli Gas",
+                    "Nominal": 20000,
+                    "Kategori": "Operasional"
+                }
+            ],
+            "total": 20000
+        },
+        "TRXK-261203-3418-004-004-004": {
+            "tanggal": "2026-03-12",
+            "waktu": "18:34",
+            "sumber_waktu": "NTP",
             "items": [
                 {
                     "Tujuan": "Makan Karyawan",
