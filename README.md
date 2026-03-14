@@ -19,7 +19,7 @@ Developed from real warung operational needs — focused on simplicity, local da
 - 🖥️ CLI menu interface
 - 🛠️ Input validation
 
-### POS (v1.6 — Stable)
+### POS (v1.7 — Stable)
 - 🧾 Income recording (Pemasukan)
 - 💸 Expense recording (Pengeluaran) with categories
 - 🔢 Unique transaction ID system (anti-fraud timestamp encoding)
@@ -28,6 +28,9 @@ Developed from real warung operational needs — focused on simplicity, local da
 - 🕐 NTP time server — Surabaya timezone (anti-fraud timestamp)
 - 🔍 Sales detail lookup by date
 - 📦 Item recap per day — sorted by quantity
+- 🔎 Price lookup from DB_HARGA with paginated search
+- 📂 Submenu — Transaksi & Laporan separated
+- 🎨 ASCII art header via pyfiglet
 - 💾 JSON-based transaction database
 - 🛠️ Input validation with price sanity check
 - ♻️ Universal save function `save_trx()`
@@ -38,7 +41,7 @@ Developed from real warung operational needs — focused on simplicity, local da
 
 - **Language:** Python 3.12
 - **Database:** JSON (local flat-file)
-- **Dependencies:** `os`, `json`, `datetime`, `ntplib`
+- **Dependencies:** `os`, `json`, `datetime`, `ntplib`, `pyfiglet`, `shutil`
 - **Environment:** Termux (Android) / Any Python 3.x terminal
 
 ---
@@ -59,7 +62,8 @@ python-wms-cli/
 │   │   └── v1/
 │   │       ├── pos_cli_v1.py
 │   │       ├── pos_cli_v1_5.py
-│   │       └── pos_cli_v1_6.py          ← stable
+│   │       ├── pos_cli_v1_6.py
+│   │       └── pos_cli_v1_7.py          ← stable
 │   └── POS+WMS/
 │       ├── v1/
 │       ├── v2/
@@ -107,10 +111,14 @@ python-wms-cli/
 }
 ```
 
-### DB_HARGA.json *(used in POS v1.7+)*
+### DB_HARGA.json
 ```json
 {
-  "produk": {}
+  "produk": {
+    "kategori": {
+      "nama barang": { "harga": 0, "satuan": "pcs" }
+    }
+  }
 }
 ```
 
@@ -148,10 +156,15 @@ python wms_cli_v2_5.py
 ### POS
 ```bash
 cd src/POS/v1
-python pos_cli_v1_6.py
+python pos_cli_v1_7.py
 ```
 
 > Make sure the `database/` folder exists at `../../database/` relative to the script, or adjust the path in the source file.
+
+Install dependencies:
+```bash
+pip install ntplib pyfiglet --break-system-packages
+```
 
 ---
 
@@ -162,8 +175,8 @@ WMS v2.5     ✅ Stable
 POS v1.0     ✅ Stable
 POS v1.5     ✅ Stable
 POS v1.6     ✅ Stable
+POS v1.7     ✅ Stable
     │
-    ├── POS v1.7   → Submenu Transaksi & Laporan, price lookup from DB_HARGA
     ├── POS v1.8   → Beverage variants + consignment tracking & payment
     │
     ├── POS+WMS v2.0 → Integration: stock auto-deduct on sale, modular architecture
@@ -180,8 +193,11 @@ POS v1.6     ✅ Stable
 - [x] NTP time server — Surabaya timezone (v1.6)
 - [x] Sales detail lookup by date (v1.6)
 - [x] Item recap per day (v1.6)
-- [ ] Submenu Transaksi & Laporan (v1.7)
-- [ ] Price lookup from DB_HARGA (v1.7)
+- [x] Submenu Transaksi & Laporan (v1.7)
+- [x] Price lookup from DB_HARGA with pagination (v1.7)
+- [x] ASCII art header — pyfiglet (v1.7)
+- [x] Counter reset bug fix — both jenis reset on date change (v1.7)
+- [x] Code refactor — helper functions, DRY architecture (v1.7)
 - [ ] Beverage variants + consignment tracking & payment (v1.8)
 - [ ] WMS auto stock deduction on POS sale (POS+WMS v2.0)
 - [ ] Modular architecture — split into multiple .py files (v2.0)
@@ -190,6 +206,17 @@ POS v1.6     ✅ Stable
 ---
 
 ## Changelog
+
+### POS v1.7
+- Submenu Transaksi (Pemasukan/Pengeluaran) & Laporan (Daily/Detail/Recap) separated
+- Price lookup from DB_HARGA — keyword search with paginated results (5 per page)
+- ASCII art header via pyfiglet (`mini` font)
+- `trx_id_call()` refactored — merged pemasukan & pengeluaran into single function with `jenis` param
+- Counter reset bug fix — both pemasukan & pengeluaran counters now reset correctly on date change
+- Helper functions extracted: `get_trx_harian()`, `hitung_total()`, `rekap_item()`, `item_terlaris()`, `list_pengeluaran()`
+- `header()` utility function — reusable report header
+- `menu_map.get()` pattern for cleaner menu routing
+- Added `pyfiglet` and `shutil` to dependencies
 
 ### POS v1.6
 - NTP time server integration (`id.pool.ntp.org`) — Surabaya timezone (WIB UTC+7)
@@ -266,7 +293,7 @@ Dikembangkan dari kebutuhan operasional warung nyata — fokus pada kesederhanaa
 - 🖥️ Antarmuka menu CLI
 - 🛠️ Validasi input
 
-### POS (v1.6 — Stabil)
+### POS (v1.7 — Stabil)
 - 🧾 Pencatatan pemasukan (multi-item)
 - 💸 Pencatatan pengeluaran dengan kategori
 - 🔢 Format ID transaksi unik (timestamp dibalik — anti-fraud)
@@ -275,6 +302,9 @@ Dikembangkan dari kebutuhan operasional warung nyata — fokus pada kesederhanaa
 - 🕐 NTP time server — timezone Surabaya (anti-fraud timestamp)
 - 🔍 Detail penjualan — lookup berdasarkan tanggal
 - 📦 Rekap item per hari — diurutkan dari terbanyak
+- 🔎 Lookup harga dari DB_HARGA dengan pencarian paginasi
+- 📂 Submenu — Transaksi & Laporan dipisah
+- 🎨 ASCII art header via pyfiglet
 - 💾 Database transaksi berbasis JSON
 - 🛠️ Validasi input + cek harga terlalu rendah
 - ♻️ Fungsi simpan universal `save_trx()`
@@ -285,7 +315,7 @@ Dikembangkan dari kebutuhan operasional warung nyata — fokus pada kesederhanaa
 
 - **Bahasa:** Python 3.12
 - **Database:** JSON (flat-file lokal)
-- **Dependensi:** `os`, `json`, `datetime`, `ntplib`
+- **Dependensi:** `os`, `json`, `datetime`, `ntplib`, `pyfiglet`, `shutil`
 - **Environment:** Termux (Android) / Terminal Python 3.x manapun
 
 ---
@@ -306,7 +336,8 @@ python-wms-cli/
 │   │   └── v1/
 │   │       ├── pos_cli_v1.py
 │   │       ├── pos_cli_v1_5.py
-│   │       └── pos_cli_v1_6.py          ← stabil
+│   │       ├── pos_cli_v1_6.py
+│   │       └── pos_cli_v1_7.py          ← stabil
 │   └── POS+WMS/
 │       ├── v1/
 │       ├── v2/
@@ -356,7 +387,12 @@ python wms_cli_v2_5.py
 ### POS
 ```bash
 cd src/POS/v1
-python pos_cli_v1_6.py
+python pos_cli_v1_7.py
+```
+
+Install dependensi:
+```bash
+pip install ntplib pyfiglet --break-system-packages
 ```
 
 > Pastikan folder `database/` ada di `../../database/` relatif terhadap script, atau sesuaikan path di source code.
@@ -370,8 +406,8 @@ WMS v2.5     ✅ Selesai
 POS v1.0     ✅ Selesai
 POS v1.5     ✅ Selesai
 POS v1.6     ✅ Selesai
+POS v1.7     ✅ Selesai
     │
-    ├── POS v1.7   → Submenu Transaksi & Laporan, lookup harga DB_HARGA
     ├── POS v1.8   → Variasi wadah minuman + tracking & pembayaran konsinyasi
     │
     ├── POS+WMS v2.0 → Integrasi WMS, stok auto berkurang, arsitektur modular
@@ -384,6 +420,17 @@ POS v1.6     ✅ Selesai
 ---
 
 ## Changelog
+
+### POS v1.7
+- Submenu Transaksi (Pemasukan/Pengeluaran) & Laporan (Daily/Detail/Recap) dipisah
+- Lookup harga dari DB_HARGA — pencarian keyword dengan hasil paginasi (5 per halaman)
+- ASCII art header via pyfiglet (font `mini`)
+- `trx_id_call()` direfactor — pemasukan & pengeluaran digabung dengan parameter `jenis`
+- Fix bug reset counter — kedua jenis counter kini reset dengan benar saat ganti hari/bulan/tahun
+- Helper functions diekstrak: `get_trx_harian()`, `hitung_total()`, `rekap_item()`, `item_terlaris()`, `list_pengeluaran()`
+- Fungsi `header()` — reusable header laporan
+- Pola `menu_map.get()` untuk routing menu yang lebih bersih
+- Tambah `pyfiglet` dan `shutil` ke dependensi
 
 ### POS v1.6
 - Integrasi NTP time server (`id.pool.ntp.org`) — timezone WIB (UTC+7)

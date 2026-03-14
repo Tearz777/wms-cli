@@ -1,12 +1,12 @@
 {
     "counter": {
-        "pemasukan_harian": 6,
-        "pemasukan_mingguan": 6,
-        "pemasukan_bulanan": 6,
-        "pengeluaran_harian": 5,
-        "pengeluaran_mingguan": 5,
-        "pengeluaran_bulanan": 5,
-        "hari_aktif": "12",
+        "pemasukan_harian": 2,
+        "pemasukan_mingguan": 10,
+        "pemasukan_bulanan": 10,
+        "pengeluaran_harian": 1,
+        "pengeluaran_mingguan": 6,
+        "pengeluaran_bulanan": 6,
+        "hari_aktif": "15",
         "minggu_aktif": "10",
         "bulan_aktif": "03",
         "tahun_aktif": "2026"
@@ -90,6 +90,79 @@
                 }
             ],
             "total": 22000
+        },
+        "TRX-261403-3112-001-006-006": {
+            "tanggal": "2026-03-14",
+            "waktu": "12:31",
+            "sumber_waktu": "NTP",
+            "items": [],
+            "total": 0
+        },
+        "TRX-261403-0115-002-007-007": {
+            "tanggal": "2026-03-14",
+            "waktu": "15:01",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Nama": "taman panjang cm",
+                    "Qty": 5,
+                    "Harga": 49000,
+                    "Total": 245000
+                },
+                {
+                    "Nama": "nail pink",
+                    "Qty": 2,
+                    "Harga": 23000,
+                    "Total": 46000
+                },
+                {
+                    "Nama": "ties 30 hitam",
+                    "Qty": 5,
+                    "Harga": 6000,
+                    "Total": 30000
+                }
+            ],
+            "total": 321000
+        },
+        "TRX-261403-1416-003-008-008": {
+            "tanggal": "2026-03-14",
+            "waktu": "16:14",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Nama": "taman pvc biru",
+                    "Qty": 4,
+                    "Harga": 28000,
+                    "Total": 112000
+                },
+                {
+                    "Nama": "media set",
+                    "Qty": 2,
+                    "Harga": 144000,
+                    "Total": 288000
+                }
+            ],
+            "total": 400000
+        },
+        "TRX-261503-2101-001-009-009": {
+            "tanggal": "2026-03-15",
+            "waktu": "01:21",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Nama": "taman pvc putih",
+                    "Qty": 3,
+                    "Harga": 39000,
+                    "Total": 117000
+                },
+                {
+                    "Nama": "media set",
+                    "Qty": 1,
+                    "Harga": 144000,
+                    "Total": 144000
+                }
+            ],
+            "total": 261000
         }
     },
     "pengeluaran": {
@@ -142,6 +215,19 @@
                 }
             ],
             "total": 10000
+        },
+        "TRXK-261403-1416-005-005-005": {
+            "tanggal": "2026-03-14",
+            "waktu": "16:14",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Tujuan": "Makan Karyawan",
+                    "Nominal": 12000,
+                    "Kategori": "Makan Karyawan"
+                }
+            ],
+            "total": 12000
         }
     }
 }
