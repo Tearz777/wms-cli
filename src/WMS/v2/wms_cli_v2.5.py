@@ -9,7 +9,7 @@
 import json
 import os
 
-db = "../../database/WMS_DB.json"
+db = "../../../database/WMS_DB.json"
 
 def load_db():
     if os.path.exists(db):

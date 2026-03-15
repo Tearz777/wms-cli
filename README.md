@@ -10,7 +10,7 @@ Developed from real warung operational needs — focused on simplicity, local da
 
 ## Features
 
-### WMS (v2.5 — Stable)
+### WMS (v2.6 — Stable)
 - 📦 Inventory tracking
 - ➕ Stock in (barang masuk)
 - ➖ Stock out (barang keluar)
@@ -18,6 +18,7 @@ Developed from real warung operational needs — focused on simplicity, local da
 - 💾 JSON-based local database
 - 🖥️ CLI menu interface
 - 🛠️ Input validation
+- 📐 Terminal-width adaptive display
 
 ### POS (v1.7 — Stable)
 - 🧾 Income recording (Pemasukan)
@@ -57,7 +58,8 @@ python-wms-cli/
 │   │   │   └── wms_cli_v1.py
 │   │   └── v2/
 │   │       ├── wms_cli_v2.0.py
-│   │       └── wms_cli_v2_5.py          ← stable
+│   │       ├── wms_cli_v2_5.py
+│   │       └── wms_cli_v2_6.py          ← stable
 │   ├── POS/
 │   │   └── v1/
 │   │       ├── pos_cli_v1.py
@@ -86,8 +88,7 @@ python-wms-cli/
 ### WMS_DB.json
 ```json
 {
-  "kopi": { "stok": 10, "min_stok": 3 },
-  "gula": { "stok": 5, "min_stok": 2 }
+  "kopi": { "stok": 10, "min": 3 }
 }
 ```
 
@@ -111,12 +112,36 @@ python-wms-cli/
 }
 ```
 
-### DB_HARGA.json
+### DB_HARGA.json *(v1.8+)*
 ```json
 {
   "produk": {
-    "kategori": {
-      "nama barang": { "harga": 0, "satuan": "pcs" }
+    "minuman": {
+      "own": {
+        "kopi racik": {
+          "variant": {
+            "gelas kopi": 5000,
+            "cangkir": 4000
+          }
+        }
+      },
+      "konsinyasi": {}
+    },
+    "makanan": {
+      "own": {
+        "mie goreng": {
+          "variant": {
+            "piring": 7000
+          }
+        }
+      },
+      "konsinyasi": {
+        "martabak": {
+          "variant": {
+            "default": 1000
+          }
+        }
+      }
     }
   }
 }
@@ -150,7 +175,7 @@ Timestamps are sourced from NTP server (`id.pool.ntp.org`) with fallback to loca
 ### WMS
 ```bash
 cd src/WMS/v2
-python wms_cli_v2_5.py
+python wms_cli_v2_6.py
 ```
 
 ### POS
@@ -159,12 +184,12 @@ cd src/POS/v1
 python pos_cli_v1_7.py
 ```
 
-> Make sure the `database/` folder exists at `../../database/` relative to the script, or adjust the path in the source file.
-
 Install dependencies:
 ```bash
 pip install ntplib pyfiglet --break-system-packages
 ```
+
+> Make sure the `database/` folder exists at `../../database/` relative to the script, or adjust the path in the source file.
 
 ---
 
@@ -172,18 +197,24 @@ pip install ntplib pyfiglet --break-system-packages
 
 ```
 WMS v2.5     ✅ Stable
-POS v1.0     ✅ Stable
-POS v1.5     ✅ Stable
-POS v1.6     ✅ Stable
+WMS v2.6     ✅ Stable
 POS v1.7     ✅ Stable
     │
-    ├── POS v1.8   → Beverage variants + consignment tracking & payment
+    ├── POS v1.8   → Warung mode: product variants + new DB_HARGA structure
+    ├── POS v1.9   → Refactor & modularization prep
     │
-    ├── POS+WMS v2.0 → Integration: stock auto-deduct on sale, modular architecture
+    ├── WMS v2.7   → Inventory usability: search, inventory report, stock status OK/LOW/OUT
+    ├── WMS v2.8   → Inventory intelligence: stock movement log, threshold alert
+    ├── WMS v2.9   → Integration readiness: API-like functions for POS
     │
-    ├── ERP CLI    → Combined: financial reports, hutang/piutang, restock alerts
+    ├── POS v2.0   → Full modularization (multi-.py architecture)
+    ├── POS v2.x   → Feature expansion on modular architecture
+    ├── POS v2.9   → Integration readiness
     │
-    └── Web ERP    → Flask/Django, owner vs kasir access control
+    └── POS+WMS v3.0 → Full merge: auto stock deduct, restock alert, inventory log
+         │
+         ├── ERP CLI  → Financial reports, hutang/piutang, COGS, profit
+         └── Web ERP  → Flask/FastAPI, owner vs kasir access control
 ```
 
 ### Detailed Backlog
@@ -196,23 +227,38 @@ POS v1.7     ✅ Stable
 - [x] Submenu Transaksi & Laporan (v1.7)
 - [x] Price lookup from DB_HARGA with pagination (v1.7)
 - [x] ASCII art header — pyfiglet (v1.7)
-- [x] Counter reset bug fix — both jenis reset on date change (v1.7)
+- [x] Counter reset bug fix (v1.7)
 - [x] Code refactor — helper functions, DRY architecture (v1.7)
-- [ ] Beverage variants + consignment tracking & payment (v1.8)
-- [ ] WMS auto stock deduction on POS sale (POS+WMS v2.0)
-- [ ] Modular architecture — split into multiple .py files (v2.0)
+- [x] WMS global refactor — docstrings, barang_keluar fix, adaptive display (v2.6)
+- [ ] Warung product catalog — variants + tipe own/konsinyasi (v1.8)
+- [ ] Update `cari_barang()` and `input_pemasukan()` for new DB structure (v1.8)
+- [ ] Refactor & modularization prep (v1.9)
+- [ ] WMS inventory usability — search, report, stock status OK/LOW/OUT (v2.7)
+- [ ] WMS stock movement log + threshold alert (v2.8)
+- [ ] WMS API-like functions: `get_stok()`, `kurangi_stok()`, `tambah_stok()` (v2.9)
+- [ ] POS full modularization (v2.0)
+- [ ] POS+WMS full merge — auto stock deduct on sale (v3.0)
+- [ ] Accounting layer — COGS, profit, expense categories (ERP CLI)
 - [ ] Owner vs kasir role access (Web ERP)
 
 ---
 
 ## Changelog
 
+### WMS v2.6
+- Global refactor — consistent style with POS v1.7
+- Added docstrings to all functions
+- Fixed `barang_keluar()` bug — stock limit now warning only, not blocking
+- Terminal-width adaptive display using `shutil.get_terminal_size()`
+- `menu_map` pattern for cleaner menu routing
+- Added `Press Enter...` feedback on invalid input
+
 ### POS v1.7
 - Submenu Transaksi (Pemasukan/Pengeluaran) & Laporan (Daily/Detail/Recap) separated
 - Price lookup from DB_HARGA — keyword search with paginated results (5 per page)
 - ASCII art header via pyfiglet (`mini` font)
-- `trx_id_call()` refactored — merged pemasukan & pengeluaran into single function with `jenis` param
-- Counter reset bug fix — both pemasukan & pengeluaran counters now reset correctly on date change
+- `trx_id_call()` refactored — merged into single function with `jenis` param
+- Counter reset bug fix — both counters reset correctly on date change
 - Helper functions extracted: `get_trx_harian()`, `hitung_total()`, `rekap_item()`, `item_terlaris()`, `list_pengeluaran()`
 - `header()` utility function — reusable report header
 - `menu_map.get()` pattern for cleaner menu routing
@@ -227,9 +273,9 @@ POS v1.7     ✅ Stable
 
 ### POS v1.5
 - Refactor: simpan_transaksi() universal → save_trx()
-- Fix counter reset bug: mingguan reset tiap ganti bulan, bulanan reset tiap ganti tahun
+- Fix counter reset bug
 - Tambah tahun_aktif di counter DB
-- Daily Report (Laporan Harian) — jumlah transaksi, item terlaris, list pengeluaran, laba kotor
+- Daily Report — jumlah transaksi, item terlaris, list pengeluaran, laba kotor
 
 ### POS v1.0
 - Income recording (Pemasukan) with multi-item support
@@ -284,7 +330,7 @@ Dikembangkan dari kebutuhan operasional warung nyata — fokus pada kesederhanaa
 
 ## Fitur
 
-### WMS (v2.5 — Stabil)
+### WMS (v2.6 — Stabil)
 - 📦 Pencatatan stok
 - ➕ Barang masuk
 - ➖ Barang keluar
@@ -292,6 +338,7 @@ Dikembangkan dari kebutuhan operasional warung nyata — fokus pada kesederhanaa
 - 💾 Database lokal berbasis JSON
 - 🖥️ Antarmuka menu CLI
 - 🛠️ Validasi input
+- 📐 Tampilan adaptif sesuai lebar terminal
 
 ### POS (v1.7 — Stabil)
 - 🧾 Pencatatan pemasukan (multi-item)
@@ -331,7 +378,8 @@ python-wms-cli/
 │   │   │   └── wms_cli_v1.py
 │   │   └── v2/
 │   │       ├── wms_cli_v2.0.py
-│   │       └── wms_cli_v2_5.py          ← stabil
+│   │       ├── wms_cli_v2_5.py
+│   │       └── wms_cli_v2_6.py          ← stabil
 │   ├── POS/
 │   │   └── v1/
 │   │       ├── pos_cli_v1.py
@@ -381,7 +429,7 @@ Timestamp diambil dari NTP server (`id.pool.ntp.org`) dengan fallback ke clock l
 ### WMS
 ```bash
 cd src/WMS/v2
-python wms_cli_v2_5.py
+python wms_cli_v2_6.py
 ```
 
 ### POS
@@ -403,30 +451,44 @@ pip install ntplib pyfiglet --break-system-packages
 
 ```
 WMS v2.5     ✅ Selesai
-POS v1.0     ✅ Selesai
-POS v1.5     ✅ Selesai
-POS v1.6     ✅ Selesai
+WMS v2.6     ✅ Selesai
 POS v1.7     ✅ Selesai
     │
-    ├── POS v1.8   → Variasi wadah minuman + tracking & pembayaran konsinyasi
+    ├── POS v1.8   → Warung mode: varian produk + struktur DB_HARGA baru
+    ├── POS v1.9   → Refactor & persiapan modularisasi
     │
-    ├── POS+WMS v2.0 → Integrasi WMS, stok auto berkurang, arsitektur modular
+    ├── WMS v2.7   → Inventory usability: search, laporan, status stok OK/LOW/OUT
+    ├── WMS v2.8   → Inventory intelligence: log pergerakan stok, threshold alert
+    ├── WMS v2.9   → Integration readiness: API-like functions untuk POS
     │
-    ├── ERP CLI    → Gabung semua: laporan keuangan, hutang/piutang, alert restock
+    ├── POS v2.0   → Full modularisasi (arsitektur multi-.py)
+    ├── POS v2.x   → Pengembangan fitur di atas arsitektur modular
+    ├── POS v2.9   → Integration readiness
     │
-    └── Web ERP    → Flask/Django, akses owner vs kasir
+    └── POS+WMS v3.0 → Merge penuh: stok auto berkurang, restock alert, inventory log
+         │
+         ├── ERP CLI  → Laporan keuangan, hutang/piutang, COGS, profit
+         └── Web ERP  → Flask/FastAPI, akses owner vs kasir
 ```
 
 ---
 
 ## Changelog
 
+### WMS v2.6
+- Refactor global — gaya konsisten dengan POS v1.7
+- Docstrings ditambahkan ke semua fungsi
+- Fix bug `barang_keluar()` — stok limit kini hanya warning, tidak memblokir
+- Tampilan adaptif sesuai lebar terminal via `shutil.get_terminal_size()`
+- Pola `menu_map` untuk routing menu yang lebih bersih
+- Tambah feedback `Press Enter...` saat input tidak valid
+
 ### POS v1.7
 - Submenu Transaksi (Pemasukan/Pengeluaran) & Laporan (Daily/Detail/Recap) dipisah
 - Lookup harga dari DB_HARGA — pencarian keyword dengan hasil paginasi (5 per halaman)
 - ASCII art header via pyfiglet (font `mini`)
-- `trx_id_call()` direfactor — pemasukan & pengeluaran digabung dengan parameter `jenis`
-- Fix bug reset counter — kedua jenis counter kini reset dengan benar saat ganti hari/bulan/tahun
+- `trx_id_call()` direfactor — digabung dengan parameter `jenis`
+- Fix bug reset counter — kedua jenis counter kini reset dengan benar
 - Helper functions diekstrak: `get_trx_harian()`, `hitung_total()`, `rekap_item()`, `item_terlaris()`, `list_pengeluaran()`
 - Fungsi `header()` — reusable header laporan
 - Pola `menu_map.get()` untuk routing menu yang lebih bersih
@@ -441,7 +503,7 @@ POS v1.7     ✅ Selesai
 
 ### POS v1.5
 - Refactor: `save_trx()` universal menggantikan kode simpan yang panjang
-- Fix bug counter reset: mingguan reset tiap ganti bulan, bulanan reset tiap ganti tahun
+- Fix bug counter reset
 - Tambah `tahun_aktif` di struktur counter DB
 - Laporan Harian: jumlah transaksi, item terlaris, list pengeluaran, laba kotor
 
