@@ -20,29 +20,31 @@ Developed from real warung operational needs — focused on simplicity, local da
 - 🛠️ Input validation
 - 📐 Terminal-width adaptive display
 
-### POS (v1.7 — Stable)
-- 🧾 Income recording (Pemasukan)
+### POS (v1.8 — Stable)
+- 🧾 Income recording (Pemasukan) with product variants
 - 💸 Expense recording (Pengeluaran) with categories
-- 🔢 Unique transaction ID system (anti-fraud timestamp encoding)
+- 🔢 Unique transaction ID system (anti-fraud timestamp + random suffix)
 - 📊 Independent daily / weekly / monthly counters
 - 📋 Daily report — transactions, top item, expense list, gross profit
-- 🕐 NTP time server — Surabaya timezone (anti-fraud timestamp)
-- 🔍 Sales detail lookup by date
-- 📦 Item recap per day — sorted by quantity
+- 🕐 NTP time server — Surabaya timezone with cache (anti-fraud timestamp)
+- 🔍 Sales detail lookup by date — sorted by time
+- 📦 Item recap per day — sorted by quantity + variant
 - 🔎 Price lookup from DB_HARGA with paginated search
-- 📂 Submenu — Transaksi & Laporan separated
+- 📂 Universal menu system — reusable menu engine
 - 🎨 ASCII art header via pyfiglet
-- 💾 JSON-based transaction database
+- 🛡️ Anti-corrupt database — recovery options + auto backup .bak
+- 📥 Excel import — dynamic column mapping
+- ✍️ Manual DB input — with duplicate handling
+- 💾 JSON-based transaction database (DB_HARGA_WARUNG + DB_TRX_WARUNG)
 - 🛠️ Input validation with price sanity check
-- ♻️ Universal save function `save_trx()`
 
 ---
 
 ## Tech Stack
 
-- **Language:** Python 3.12
+- **Language:** Python 3.13
 - **Database:** JSON (local flat-file)
-- **Dependencies:** `os`, `json`, `datetime`, `ntplib`, `pyfiglet`, `shutil`
+- **Dependencies:** `os`, `json`, `datetime`, `ntplib`, `pyfiglet`, `shutil`, `pandas`, `openpyxl`
 - **Environment:** Termux (Android) / Any Python 3.x terminal
 
 ---
@@ -65,7 +67,8 @@ python-wms-cli/
 │   │       ├── pos_cli_v1.py
 │   │       ├── pos_cli_v1_5.py
 │   │       ├── pos_cli_v1_6.py
-│   │       └── pos_cli_v1_7.py          ← stable
+│   │       ├── pos_cli_v1_7.py
+│   │       └── pos_cli_1.8.py           ← stable
 │   └── POS+WMS/
 │       ├── v1/
 │       ├── v2/
@@ -74,7 +77,9 @@ python-wms-cli/
 ├── database/
 │   ├── WMS_DB.json
 │   ├── DB_HARGA.json
-│   └── DB_TRX.json
+│   ├── DB_HARGA_WARUNG.json
+│   ├── DB_TRX.json
+│   └── DB_TRX_WARUNG.json
 │
 ├── README.md
 ├── .gitignore
@@ -92,7 +97,7 @@ python-wms-cli/
 }
 ```
 
-### DB_TRX.json
+### DB_TRX_WARUNG.json
 ```json
 {
   "counter": {
@@ -112,17 +117,15 @@ python-wms-cli/
 }
 ```
 
-### DB_HARGA.json *(v1.8+)*
+### DB_HARGA_WARUNG.json *(v1.8+)*
 ```json
 {
   "produk": {
     "minuman": {
       "own": {
         "kopi racik": {
-          "variant": {
-            "gelas kopi": 5000,
-            "cangkir": 4000
-          }
+          "gelas kopi": 5000,
+          "cangkir": 4000
         }
       },
       "konsinyasi": {}
@@ -130,16 +133,12 @@ python-wms-cli/
     "makanan": {
       "own": {
         "mie goreng": {
-          "variant": {
-            "piring": 7000
-          }
+          "piring": 7000
         }
       },
       "konsinyasi": {
         "martabak": {
-          "variant": {
-            "default": 1000
-          }
+          "default": 1000
         }
       }
     }
@@ -152,8 +151,8 @@ python-wms-cli/
 ## Transaction ID Format
 
 ```
-Pemasukan  : TRX-YYDDMM-MMHH-XXX-YYY-ZZZ
-Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ
+Pemasukan  : TRX-YYDDMM-MMHH-XXX-YYY-ZZZ-RRR
+Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ-RRR
 ```
 
 | Part | Meaning |
@@ -161,12 +160,13 @@ Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ
 | `YYDDMM` | Year-Day-Month (deliberately reversed — anti-fraud) |
 | `MMHH` | Minute-Hour (deliberately reversed — anti-fraud) |
 | `XXX` | Daily counter (resets every day) |
-| `YYY` | Weekly counter (resets every month) |
+| `YYY` | Weekly counter (resets every week) |
 | `ZZZ` | Monthly counter (resets every year) |
+| `RRR` | Random 3-digit suffix (anti-guess) |
 
 All three counters are **independent** of each other.
 
-Timestamps are sourced from NTP server (`id.pool.ntp.org`) with fallback to local clock if offline. Each transaction records `sumber_waktu: "NTP"` or `"LOKAL"` for audit purposes.
+Timestamps are sourced from NTP server (`id.pool.ntp.org`) with offset cache and fallback to local clock if offline. Each transaction records `sumber_waktu: "NTP"` or `"LOKAL"` for audit purposes.
 
 ---
 
@@ -181,12 +181,12 @@ python wms_cli_v2_6.py
 ### POS
 ```bash
 cd src/POS/v1
-python pos_cli_v1_7.py
+python pos_cli_1.8.py
 ```
 
 Install dependencies:
 ```bash
-pip install ntplib pyfiglet --break-system-packages
+pip install ntplib pyfiglet pandas openpyxl --break-system-packages
 ```
 
 > Make sure the `database/` folder exists at `../../database/` relative to the script, or adjust the path in the source file.
@@ -199,8 +199,8 @@ pip install ntplib pyfiglet --break-system-packages
 WMS v2.5     ✅ Stable
 WMS v2.6     ✅ Stable
 POS v1.7     ✅ Stable
+POS v1.8     ✅ Stable
     │
-    ├── POS v1.8   → Warung mode: product variants + new DB_HARGA structure
     ├── POS v1.9   → Refactor & modularization prep
     │
     ├── WMS v2.7   → Inventory usability: search, inventory report, stock status OK/LOW/OUT
@@ -230,8 +230,17 @@ POS v1.7     ✅ Stable
 - [x] Counter reset bug fix (v1.7)
 - [x] Code refactor — helper functions, DRY architecture (v1.7)
 - [x] WMS global refactor — docstrings, barang_keluar fix, adaptive display (v2.6)
-- [ ] Warung product catalog — variants + tipe own/konsinyasi (v1.8)
-- [ ] Update `cari_barang()` and `input_pemasukan()` for new DB structure (v1.8)
+- [x] Warung product catalog — variants + tipe own/konsinyasi (v1.8)
+- [x] New DB_HARGA structure — kategori/tipe/nama/varian (v1.8)
+- [x] Excel import with dynamic column mapping (v1.8)
+- [x] Anti-corrupt DB — recovery options + .bak backup (v1.8)
+- [x] NTP cache — sync once, use offset (v1.8)
+- [x] Random suffix on transaction ID (v1.8)
+- [x] Universal menu engine (v1.8)
+- [x] Indonesian day names in header (v1.8)
+- [ ] Fix "nan" varian from Excel import (v1.8.1)
+- [ ] Fix random number mismatch between display and saved ID (v1.8.1)
+- [ ] Text wrapping for long product names (v1.8.1)
 - [ ] Refactor & modularization prep (v1.9)
 - [ ] WMS inventory usability — search, report, stock status OK/LOW/OUT (v2.7)
 - [ ] WMS stock movement log + threshold alert (v2.8)
@@ -244,6 +253,24 @@ POS v1.7     ✅ Stable
 ---
 
 ## Changelog
+
+### POS v1.8
+- Warung mode — new DB_HARGA structure: kategori → tipe → nama → varian → harga
+- Product variants — wadah/ukuran per item (gelas kopi, cangkir, gelas es, dll)
+- Tipe produk — own vs konsinyasi
+- Excel import — dynamic column mapping, preview before import
+- Manual DB input — with duplicate handling and overwrite option
+- Anti-corrupt DB — JSONDecodeError recovery with .bak backup
+- NTP cache — sync offset once, reuse for efficiency, `force_sync` option
+- Random 3-digit suffix on transaction ID (anti-guess)
+- Universal menu engine — reusable `menu()` function
+- Indonesian day names in header (Senin-Minggu)
+- `get_trx_harian()` now returns both pemasukan and pengeluaran
+- Sales detail sorted by transaction time
+- Item recap includes variant breakdown
+- Daily report with date input (Enter = today)
+- `pandas` + `openpyxl` added to dependencies
+- Separate DB files: DB_HARGA_WARUNG.json + DB_TRX_WARUNG.json
 
 ### WMS v2.6
 - Global refactor — consistent style with POS v1.7
@@ -340,29 +367,31 @@ Dikembangkan dari kebutuhan operasional warung nyata — fokus pada kesederhanaa
 - 🛠️ Validasi input
 - 📐 Tampilan adaptif sesuai lebar terminal
 
-### POS (v1.7 — Stabil)
-- 🧾 Pencatatan pemasukan (multi-item)
+### POS (v1.8 — Stabil)
+- 🧾 Pencatatan pemasukan dengan varian produk
 - 💸 Pencatatan pengeluaran dengan kategori
-- 🔢 Format ID transaksi unik (timestamp dibalik — anti-fraud)
+- 🔢 Format ID transaksi unik (timestamp dibalik + suffix random — anti-fraud)
 - 📊 Counter harian / mingguan / bulanan yang independen
 - 📋 Laporan harian — transaksi, item terlaris, list pengeluaran, laba kotor
-- 🕐 NTP time server — timezone Surabaya (anti-fraud timestamp)
-- 🔍 Detail penjualan — lookup berdasarkan tanggal
-- 📦 Rekap item per hari — diurutkan dari terbanyak
-- 🔎 Lookup harga dari DB_HARGA dengan pencarian paginasi
-- 📂 Submenu — Transaksi & Laporan dipisah
-- 🎨 ASCII art header via pyfiglet
-- 💾 Database transaksi berbasis JSON
-- 🛠️ Validasi input + cek harga terlalu rendah
-- ♻️ Fungsi simpan universal `save_trx()`
+- 🕐 NTP time server dengan cache — timezone Surabaya
+- 🔍 Detail penjualan — lookup berdasarkan tanggal, diurutkan per jam
+- 📦 Rekap item per hari — termasuk breakdown varian
+- 🔎 Lookup harga dari DB_HARGA dengan paginasi
+- 📂 Universal menu engine — fungsi menu yang reusable
+- 🎨 ASCII art header via pyfiglet + nama hari Indonesia
+- 🛡️ Anti-corrupt database — recovery options + backup .bak otomatis
+- 📥 Import Excel — mapping kolom dinamis
+- ✍️ Input manual DB — dengan duplicate handling
+- 💾 Database terpisah: DB_HARGA_WARUNG.json + DB_TRX_WARUNG.json
+- 🛠️ Validasi input lengkap
 
 ---
 
 ## Tech Stack
 
-- **Bahasa:** Python 3.12
+- **Bahasa:** Python 3.13
 - **Database:** JSON (flat-file lokal)
-- **Dependensi:** `os`, `json`, `datetime`, `ntplib`, `pyfiglet`, `shutil`
+- **Dependensi:** `os`, `json`, `datetime`, `ntplib`, `pyfiglet`, `shutil`, `pandas`, `openpyxl`
 - **Environment:** Termux (Android) / Terminal Python 3.x manapun
 
 ---
@@ -385,7 +414,8 @@ python-wms-cli/
 │   │       ├── pos_cli_v1.py
 │   │       ├── pos_cli_v1_5.py
 │   │       ├── pos_cli_v1_6.py
-│   │       └── pos_cli_v1_7.py          ← stabil
+│   │       ├── pos_cli_v1_7.py
+│   │       └── pos_cli_1.8.py           ← stabil
 │   └── POS+WMS/
 │       ├── v1/
 │       ├── v2/
@@ -394,7 +424,9 @@ python-wms-cli/
 ├── database/
 │   ├── WMS_DB.json
 │   ├── DB_HARGA.json
-│   └── DB_TRX.json
+│   ├── DB_HARGA_WARUNG.json
+│   ├── DB_TRX.json
+│   └── DB_TRX_WARUNG.json
 │
 ├── README.md
 ├── .gitignore
@@ -406,8 +438,8 @@ python-wms-cli/
 ## Format ID Transaksi
 
 ```
-Pemasukan  : TRX-YYDDMM-MMHH-XXX-YYY-ZZZ
-Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ
+Pemasukan  : TRX-YYDDMM-MMHH-XXX-YYY-ZZZ-RRR
+Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ-RRR
 ```
 
 | Bagian | Keterangan |
@@ -415,12 +447,13 @@ Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ
 | `YYDDMM` | Tahun-Tanggal-Bulan (sengaja dibalik — anti-fraud) |
 | `MMHH` | Menit-Jam (sengaja dibalik — anti-fraud) |
 | `XXX` | Counter harian (reset tiap hari) |
-| `YYY` | Counter mingguan (reset tiap ganti bulan) |
-| `ZZZ` | Counter bulanan (reset tiap ganti tahun) |
+| `YYY` | Counter mingguan (reset tiap minggu) |
+| `ZZZ` | Counter bulanan (reset tiap tahun) |
+| `RRR` | Suffix random 3 digit (anti-tebak) |
 
 Ketiga counter **independen** satu sama lain.
 
-Timestamp diambil dari NTP server (`id.pool.ntp.org`) dengan fallback ke clock lokal jika offline. Setiap transaksi menyimpan field `sumber_waktu: "NTP"` atau `"LOKAL"` untuk keperluan audit.
+Timestamp diambil dari NTP server (`id.pool.ntp.org`) dengan cache offset — sync sekali, pakai terus. Fallback ke clock lokal jika offline.
 
 ---
 
@@ -435,12 +468,12 @@ python wms_cli_v2_6.py
 ### POS
 ```bash
 cd src/POS/v1
-python pos_cli_v1_7.py
+python pos_cli_1.8.py
 ```
 
 Install dependensi:
 ```bash
-pip install ntplib pyfiglet --break-system-packages
+pip install ntplib pyfiglet pandas openpyxl --break-system-packages
 ```
 
 > Pastikan folder `database/` ada di `../../database/` relatif terhadap script, atau sesuaikan path di source code.
@@ -453,8 +486,8 @@ pip install ntplib pyfiglet --break-system-packages
 WMS v2.5     ✅ Selesai
 WMS v2.6     ✅ Selesai
 POS v1.7     ✅ Selesai
+POS v1.8     ✅ Selesai
     │
-    ├── POS v1.8   → Warung mode: varian produk + struktur DB_HARGA baru
     ├── POS v1.9   → Refactor & persiapan modularisasi
     │
     ├── WMS v2.7   → Inventory usability: search, laporan, status stok OK/LOW/OUT
@@ -474,6 +507,23 @@ POS v1.7     ✅ Selesai
 ---
 
 ## Changelog
+
+### POS v1.8
+- Warung mode — struktur DB_HARGA baru: kategori → tipe → nama → varian → harga
+- Varian produk — wadah/ukuran per item (gelas kopi, cangkir, gelas es, dll)
+- Tipe produk — own vs konsinyasi
+- Import Excel — mapping kolom dinamis, preview sebelum import
+- Input manual DB — dengan duplicate handling dan opsi overwrite
+- Anti-corrupt DB — recovery saat JSONDecodeError + backup .bak otomatis
+- NTP cache — sync offset sekali, reuse untuk efisiensi
+- Suffix random 3 digit pada ID transaksi (anti-tebak)
+- Universal menu engine — fungsi `menu()` yang reusable
+- Nama hari Indonesia di header (Senin-Minggu)
+- Detail penjualan diurutkan berdasarkan waktu transaksi
+- Rekap item include breakdown varian
+- Laporan harian dengan input tanggal (Enter = hari ini)
+- Tambah `pandas` + `openpyxl` ke dependensi
+- DB terpisah: DB_HARGA_WARUNG.json + DB_TRX_WARUNG.json
 
 ### WMS v2.6
 - Refactor global — gaya konsisten dengan POS v1.7
