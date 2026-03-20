@@ -1,0 +1,46 @@
+{
+    "counter": {
+        "pemasukan_harian": 2,
+        "pemasukan_mingguan": 2,
+        "pemasukan_bulanan": 2,
+        "pengeluaran_harian": 1,
+        "pengeluaran_mingguan": 1,
+        "pengeluaran_bulanan": 1,
+        "hari_aktif": "20",
+        "minggu_aktif": "11",
+        "bulan_aktif": "03",
+        "tahun_aktif": "2026"
+    },
+    "pemasukan": {
+        "TRX-262003-3709-001-001-001-993": {
+            "tanggal": "2026-03-20",
+            "waktu": "09:37",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Nama": "kopi racik",
+                    "Varian": "gelas kopi",
+                    "Harga": 5000,
+                    "Qty": 2,
+                    "Sub Total": 10000
+                },
+                {
+                    "Nama": "teh",
+                    "Varian": "gelas jumbo",
+                    "Harga": 5000,
+                    "Qty": 2,
+                    "Sub Total": 10000
+                },
+                {
+                    "Nama": "jajan 1k",
+                    "Varian": "nan",
+                    "Harga": 1000,
+                    "Qty": 5,
+                    "Sub Total": 5000
+                }
+            ],
+            "total": 25000
+        }
+    },
+    "pengeluaran": {}
+}

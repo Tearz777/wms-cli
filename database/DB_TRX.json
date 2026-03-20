@@ -1,12 +1,12 @@
 {
     "counter": {
         "pemasukan_harian": 2,
-        "pemasukan_mingguan": 10,
-        "pemasukan_bulanan": 10,
-        "pengeluaran_harian": 1,
-        "pengeluaran_mingguan": 6,
-        "pengeluaran_bulanan": 6,
-        "hari_aktif": "15",
+        "pemasukan_mingguan": 11,
+        "pemasukan_bulanan": 11,
+        "pengeluaran_harian": 2,
+        "pengeluaran_mingguan": 7,
+        "pengeluaran_bulanan": 7,
+        "hari_aktif": "17",
         "minggu_aktif": "10",
         "bulan_aktif": "03",
         "tahun_aktif": "2026"
@@ -163,6 +163,20 @@
                 }
             ],
             "total": 261000
+        },
+        "TRX-261703-2915-001-010-010": {
+            "tanggal": "2026-03-17",
+            "waktu": "15:29",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Nama": "taman pvc putih",
+                    "Qty": 4,
+                    "Harga": 39000,
+                    "Total": 156000
+                }
+            ],
+            "total": 156000
         }
     },
     "pengeluaran": {
@@ -228,6 +242,19 @@
                 }
             ],
             "total": 12000
+        },
+        "TRXK-261703-3115-001-006-006": {
+            "tanggal": "2026-03-17",
+            "waktu": "15:31",
+            "sumber_waktu": "NTP",
+            "items": [
+                {
+                    "Tujuan": "Youtube",
+                    "Nominal": 15000,
+                    "Kategori": "Lainnya"
+                }
+            ],
+            "total": 15000
         }
     }
 }

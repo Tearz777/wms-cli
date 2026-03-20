@@ -1,0 +1,290 @@
+{
+    "produk": {
+        "minuman": {
+            "own": {
+                "kopi racik": {
+                    "gelas kopi": 5000,
+                    "cangkir": 4000
+                },
+                "teh": {
+                    "gelas sedang": 3000,
+                    "gelas es": 4000,
+                    "gelas jumbo": 5000
+                },
+                "stmj macan": {
+                    "gelas kopi": 5000
+                },
+                "jahe keraton": {
+                    "gelas kopi": 5000
+                },
+                "hemaviton jreng": {
+                    "gelas es": 5000
+                },
+                "hemaviton jreng+susu": {
+                    "gelas es": 8000,
+                    "gelas jumbo": 9000
+                },
+                "extra joss": {
+                    "gelas es": 5000
+                },
+                "josua": {
+                    "gelas es": 8000,
+                    "gelas jumbo": 9000
+                },
+                "kuku bima anggur": {
+                    "gelas es": 5000
+                },
+                "kuku bima anggur susu": {
+                    "gelas es": 8000,
+                    "gelas jumbo": 9000
+                },
+                "kuku bima kopi": {
+                    "gelas es": 5000
+                },
+                "kuku bima kopi susu": {
+                    "gelas es": 8000,
+                    "gelas jumbo": 9000
+                },
+                "adem sari": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000,
+                    "gelas kopi": 5000
+                },
+                "abc kopi susu": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000
+                },
+                "kapal api mix": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000
+                },
+                "kapal api kopi susu": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000
+                },
+                "tora susu": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000
+                },
+                "tora moka": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000
+                },
+                "luwak kopi hitam": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000
+                },
+                "luwak white coffee": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000
+                },
+                "chocolatos": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000,
+                    "gelas sedang": 5000,
+                    "gelas es": 6000,
+                    "gelas jumbo": 6000
+                },
+                "milo": {
+                    "gelas kopi": 5000,
+                    "gelas sedang": 5000,
+                    "gelas es": 6000
+                },
+                "drink beng-beng": {
+                    "gelas sedang": 5000,
+                    "gelas es": 6000
+                },
+                "susu frisian flag putih": {
+                    "gelas kopi": 5000,
+                    "gelas sedang": 5000,
+                    "gelas es": 6000,
+                    "gelas jumbo": 6000
+                },
+                "susu frisian flag coklat": {
+                    "gelas kopi": 5000,
+                    "gelas sedang": 5000,
+                    "gelas es": 6000,
+                    "gelas jumbo": 6000
+                },
+                "good day mocachinno": {
+                    "gelas kopi": 5000,
+                    "gelas es": 6000
+                },
+                "energen coklat": {
+                    "gelas kopi": 5000,
+                    "gelas sedang": 5000,
+                    "gelas es": 6000
+                },
+                "energen k. hijau": {
+                    "gelas kopi": 5000,
+                    "gelas sedang": 5000,
+                    "gelas es": 6000
+                },
+                "kopi jahe sido muncul": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000
+                },
+                "susu jahe sido muncul": {
+                    "cangkir": 5000,
+                    "gelas kopi": 5000
+                },
+                "good day cappucino": {
+                    "gelas kopi": 5000,
+                    "cangkir": 5000,
+                    "gelas es": 6000
+                },
+                "good day freeze": {
+                    "gelas kopi": 5000,
+                    "gelas es": 7000,
+                    "gelas jumbo": 7000,
+                    "gelas sedang": 6000
+                },
+                "segar dingin c-1000": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "nutrisari mangga": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "nutrisari anggur": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "nutrisari blewah": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "nutrisari jambu": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "nutrisari sirsak": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "nutrisari jeruk": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "pop ice anggur": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "pop ice coklat": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "pop ice durian": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "pop ice alpukat": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "pop ice permen karet": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "pop ice strawberry": {
+                    "gelas sedang": 5000,
+                    "gelas es": 5000
+                },
+                "tea jus lemon": {
+                    "gelas es": 3000
+                },
+                "tea jus gula batu": {
+                    "gelas es": 3000
+                },
+                "tea jus apel": {
+                    "gelas es": 3000
+                },
+                "marimas sirsak": {
+                    "gelas es": 3000
+                },
+                "marimas cincau": {
+                    "gelas es": 3000
+                },
+                "marimas nanas ": {
+                    "gelas es": 3000
+                },
+                "marimas cocopandan": {
+                    "gelas es": 3000
+                },
+                "marimas melon": {
+                    "gelas es": 3000
+                },
+                "marimas anggur": {
+                    "gelas es": 3000
+                },
+                "marimas mangga": {
+                    "gelas es": 3000
+                },
+                "marimas jambu": {
+                    "gelas es": 3000
+                },
+                "marimas jeruk": {
+                    "gelas es": 3000
+                }
+            }
+        },
+        "makanan": {
+            "own": {
+                "mie goreng ": {
+                    "piring": 7000
+                },
+                "mie soto": {
+                    "mangkok": 7000
+                },
+                "mie kare": {
+                    "mangkok": 7000
+                },
+                "pilus": {
+                    "nan": 1000
+                },
+                "shanghai": {
+                    "nan": 1000
+                }
+            },
+            "konsinyasi": {
+                "kerupuk plastik": {
+                    "nan": 1000
+                },
+                "kerupuk udang": {
+                    "nan": 1000
+                },
+                "kerupuk mie": {
+                    "nan": 1000
+                },
+                "kerupuk blek": {
+                    "nan": 500
+                },
+                "rempeyek": {
+                    "nan": 1000
+                },
+                "marning": {
+                    "nan": 1000
+                },
+                "keripik usus": {
+                    "nan": 1000
+                },
+                "martabak": {
+                    "nan": 1000
+                },
+                "cenil": {
+                    "nan": 1000
+                },
+                "jajan 1k": {
+                    "nan": 1000
+                },
+                "jajan 2k": {
+                    "nan": 2000
+                },
+                "nasi bungkus": {
+                    "nan": 8000
+                }
+            }
+        }
+    }
+}
