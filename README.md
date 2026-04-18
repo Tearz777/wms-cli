@@ -1,351 +1,155 @@
-# Python WMS + POS CLI
+# NotaCore — Lightweight ERP for Small Business
 
-A lightweight **Warehouse Management System (WMS)** and **Point of Sale (POS)** built entirely in Python CLI.
+A lightweight **Warehouse Management System (WMS)**, **Point of Sale (POS)**, and **ERP Web App** built from real warung operational needs.
 
-Developed from real warung operational needs — focused on simplicity, local data storage, and zero external dependencies.
-
-> 💡 Built and maintained on a mobile phone via **Termux** — no laptop required.
+> 💡 Built and maintained entirely on a **mobile phone via Termux** — no laptop required.
 
 ---
 
-## Features
+## Projects
 
-### WMS (v2.6 — Stable)
-- 📦 Inventory tracking
-- ➕ Stock in (barang masuk)
-- ➖ Stock out (barang keluar)
-- ⚠️ Restock alert system
-- 💾 JSON-based local database
-- 🖥️ CLI menu interface
-- 🛠️ Input validation
-- 📐 Terminal-width adaptive display
+### 1. ERP PWA (Active — v1.0)
 
-### POS (v1.8 — Stable)
-- 🧾 Income recording (Pemasukan) with product variants
-- 💸 Expense recording (Pengeluaran) with categories
-- 🔢 Unique transaction ID system (anti-fraud timestamp + random suffix)
-- 📊 Independent daily / weekly / monthly counters
-- 📋 Daily report — transactions, top item, expense list, gross profit
-- 🕐 NTP time server — Surabaya timezone with cache (anti-fraud timestamp)
-- 🔍 Sales detail lookup by date — sorted by time
-- 📦 Item recap per day — sorted by quantity + variant
-- 🔎 Price lookup from DB_HARGA with paginated search
-- 📂 Universal menu system — reusable menu engine
-- 🎨 ASCII art header via pyfiglet
-- 🛡️ Anti-corrupt database — recovery options + auto backup .bak
-- 📥 Excel import — dynamic column mapping
-- ✍️ Manual DB input — with duplicate handling
-- 💾 JSON-based transaction database (DB_HARGA_WARUNG + DB_TRX_WARUNG)
-- 🛠️ Input validation with price sanity check
+Full-stack web ERP with FastAPI backend + Vue 3 frontend, built as PWA.
+
+### 2. CLI Tools (Legacy — Stable)
+
+Python CLI tools for WMS and POS — the origin of this project.
 
 ---
 
-## Tech Stack
+## ERP PWA Features
 
-- **Language:** Python 3.13
-- **Database:** JSON (local flat-file)
-- **Dependencies:** `os`, `json`, `datetime`, `ntplib`, `pyfiglet`, `shutil`, `pandas`, `openpyxl`
-- **Environment:** Termux (Android) / Any Python 3.x terminal
+### 🔐 Auth
 
----
+* JWT-based login
+* Role-based access: Admin, Owner, Kasir
+* User management (add, activate/deactivate, delete)
 
-## Project Structure
+### 📦 WMS
 
-```
-python-wms-cli/
-│
-├── src/
-│   ├── WMS/
-│   │   ├── v1/
-│   │   │   └── wms_cli_v1.py
-│   │   └── v2/
-│   │       ├── wms_cli_v2.0.py
-│   │       ├── wms_cli_v2_5.py
-│   │       └── wms_cli_v2_6.py          ← stable
-│   ├── POS/
-│   │   └── v1/
-│   │       ├── pos_cli_v1.py
-│   │       ├── pos_cli_v1_5.py
-│   │       ├── pos_cli_v1_6.py
-│   │       ├── pos_cli_v1_7.py
-│   │       └── pos_cli_1.8.py           ← stable
-│   └── POS+WMS/
-│       ├── v1/
-│       ├── v2/
-│       └── v3/
-│
-├── database/
-│   ├── WMS_DB.json
-│   ├── DB_HARGA.json
-│   ├── DB_HARGA_WARUNG.json
-│   ├── DB_TRX.json
-│   └── DB_TRX_WARUNG.json
-│
-├── README.md
-├── .gitignore
-└── LICENSE
-```
+* Product & variant management
+* Stock tracking per product & variant
+* Stock movement history
+* Smart parser — auto-restock from expense notes
+* Import from Excel, JSON, CSV, SQLite
+
+### 🛒 POS
+
+* Sales input with product autocomplete
+* Expense recording with categories
+* Smart parser — "beli kopi racik x 5" auto-updates stock
+* Transaction history & void with auto stock rollback
+* Auto journal entry on every transaction
+
+### 📒 Accounting
+
+* Chart of Accounts (COA) — default + custom
+* Auto journal from POS transactions
+* Manual journal entry & closing entries
+* Reports: Laba Rugi, Neraca
+
+### 📥 Import
+
+* Upload file → auto detect format
+* Multi-sheet XLSX, multi-table SQLite support
+* Auto header detection + dynamic column mapping
+* Import target: Products, Transactions, Accounts
 
 ---
 
-## Database Structure
+## ERP Tech Stack
 
-### WMS_DB.json
-```json
-{
-  "kopi": { "stok": 10, "min": 3 }
-}
-```
-
-### DB_TRX_WARUNG.json
-```json
-{
-  "counter": {
-    "pemasukan_harian": 1,
-    "pemasukan_mingguan": 1,
-    "pemasukan_bulanan": 1,
-    "pengeluaran_harian": 1,
-    "pengeluaran_mingguan": 1,
-    "pengeluaran_bulanan": 1,
-    "hari_aktif": "",
-    "minggu_aktif": "",
-    "bulan_aktif": "",
-    "tahun_aktif": ""
-  },
-  "pemasukan": {},
-  "pengeluaran": {}
-}
-```
-
-### DB_HARGA_WARUNG.json *(v1.8+)*
-```json
-{
-  "produk": {
-    "minuman": {
-      "own": {
-        "kopi racik": {
-          "gelas kopi": 5000,
-          "cangkir": 4000
-        }
-      },
-      "konsinyasi": {}
-    },
-    "makanan": {
-      "own": {
-        "mie goreng": {
-          "piring": 7000
-        }
-      },
-      "konsinyasi": {
-        "martabak": {
-          "default": 1000
-        }
-      }
-    }
-  }
-}
-```
+| Layer       | Tech                          |
+| ----------- | ----------------------------- |
+| Backend     | FastAPI + SQLAlchemy + SQLite |
+| Auth        | JWT (python-jose) + bcrypt    |
+| Frontend    | Vue 3 + Vite + Bootstrap 5    |
+| State       | Pinia                         |
+| HTTP        | Axios                         |
+| Environment | Termux (Android)              |
 
 ---
 
-## Transaction ID Format
+## ERP Quick Start
 
-```
-Pemasukan  : TRX-YYDDMM-MMHH-XXX-YYY-ZZZ-RRR
-Pengeluaran: TRXK-YYDDMM-MMHH-XXX-YYY-ZZZ-RRR
-```
+### Backend
 
-| Part | Meaning |
-|------|---------|
-| `YYDDMM` | Year-Day-Month (deliberately reversed — anti-fraud) |
-| `MMHH` | Minute-Hour (deliberately reversed — anti-fraud) |
-| `XXX` | Daily counter (resets every day) |
-| `YYY` | Weekly counter (resets every week) |
-| `ZZZ` | Monthly counter (resets every year) |
-| `RRR` | Random 3-digit suffix (anti-guess) |
-
-All three counters are **independent** of each other.
-
-Timestamps are sourced from NTP server (`id.pool.ntp.org`) with offset cache and fallback to local clock if offline. Each transaction records `sumber_waktu: "NTP"` or `"LOKAL"` for audit purposes.
-
----
-
-## How to Run
-
-### WMS
 ```bash
-cd src/WMS/v2
-python wms_cli_v2_6.py
+cd erp/backend
+pip install -r requirements.txt --break-system-packages
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-### POS
+### Frontend
+
 ```bash
-cd src/POS/v1
-python pos_cli_1.8.py
+cd erp/frontend
+npm install
+npm run dev
 ```
 
-Install dependencies:
-```bash
-pip install ntplib pyfiglet pandas openpyxl --break-system-packages
+### First Setup
+
+1. Register admin: `POST /auth/register`
+2. Init COA: `POST /accounting/init`
+3. Import produk lewat menu Import di UI
+
+API docs: `http://localhost:8000/docs`
+
+---
+
+## ERP Roadmap
+
+```
+ERP v1.0     🚧 Active
+  ├── Auth (JWT + roles)            ✅
+  ├── WMS (product + stock)         ✅
+  ├── POS (transaction + void)      ✅
+  ├── Accounting (journal + report) ✅
+  ├── Import (multi-format)         ✅
+  ├── User management               ✅
+  └── PWA (offline support)         🔜
+
+ERP v1.1     📋 Planned
+  ├── Granular permission per user
+  ├── Consignment tracking
+  ├── Unit conversion (pack → satuan)
+  └── Supplier management
+
+ERP v2.0     📋 Planned
+  ├── Cloud deployment
+  └── Multi-branch support
 ```
 
-> Make sure the `database/` folder exists at `../../database/` relative to the script, or adjust the path in the source file.
-
 ---
 
-## Roadmap
+## ERP Project Structure
 
 ```
-WMS v2.5     ✅ Stable
-WMS v2.6     ✅ Stable
-POS v1.7     ✅ Stable
-POS v1.8     ✅ Stable
-    │
-    ├── POS v1.9   → Refactor & modularization prep
-    │
-    ├── WMS v2.7   → Inventory usability: search, inventory report, stock status OK/LOW/OUT
-    ├── WMS v2.8   → Inventory intelligence: stock movement log, threshold alert
-    ├── WMS v2.9   → Integration readiness: API-like functions for POS
-    │
-    ├── POS v2.0   → Full modularization (multi-.py architecture)
-    ├── POS v2.x   → Feature expansion on modular architecture
-    ├── POS v2.9   → Integration readiness
-    │
-    └── POS+WMS v3.0 → Full merge: auto stock deduct, restock alert, inventory log
-         │
-         ├── ERP CLI  → Financial reports, hutang/piutang, COGS, profit
-         └── Web ERP  → Flask/FastAPI, owner vs kasir access control
+erp/
+├── backend/
+│   ├── main.py
+│   ├── config.py
+│   ├── database.py
+│   ├── models/
+│   ├── routers/
+│   └── services/
+└── frontend/
+    └── src/
+        ├── views/
+        ├── stores/
+        ├── router/
+        └── utils/
 ```
 
-### Detailed Backlog
-- [x] `simpan_transaksi()` universal function (v1.5)
-- [x] Separate counters for pemasukan & pengeluaran (v1.5 bugfix)
-- [x] Daily sales report / Laporan Harian (v1.5)
-- [x] NTP time server — Surabaya timezone (v1.6)
-- [x] Sales detail lookup by date (v1.6)
-- [x] Item recap per day (v1.6)
-- [x] Submenu Transaksi & Laporan (v1.7)
-- [x] Price lookup from DB_HARGA with pagination (v1.7)
-- [x] ASCII art header — pyfiglet (v1.7)
-- [x] Counter reset bug fix (v1.7)
-- [x] Code refactor — helper functions, DRY architecture (v1.7)
-- [x] WMS global refactor — docstrings, barang_keluar fix, adaptive display (v2.6)
-- [x] Warung product catalog — variants + tipe own/konsinyasi (v1.8)
-- [x] New DB_HARGA structure — kategori/tipe/nama/varian (v1.8)
-- [x] Excel import with dynamic column mapping (v1.8)
-- [x] Anti-corrupt DB — recovery options + .bak backup (v1.8)
-- [x] NTP cache — sync once, use offset (v1.8)
-- [x] Random suffix on transaction ID (v1.8)
-- [x] Universal menu engine (v1.8)
-- [x] Indonesian day names in header (v1.8)
-- [ ] Fix "nan" varian from Excel import (v1.8.1)
-- [ ] Fix random number mismatch between display and saved ID (v1.8.1)
-- [ ] Text wrapping for long product names (v1.8.1)
-- [ ] Refactor & modularization prep (v1.9)
-- [ ] WMS inventory usability — search, report, stock status OK/LOW/OUT (v2.7)
-- [ ] WMS stock movement log + threshold alert (v2.8)
-- [ ] WMS API-like functions: `get_stok()`, `kurangi_stok()`, `tambah_stok()` (v2.9)
-- [ ] POS full modularization (v2.0)
-- [ ] POS+WMS full merge — auto stock deduct on sale (v3.0)
-- [ ] Accounting layer — COGS, profit, expense categories (ERP CLI)
-- [ ] Owner vs kasir role access (Web ERP)
-
 ---
 
-## Changelog
+## CLI Tools (Legacy)
 
-### POS v1.8
-- Warung mode — new DB_HARGA structure: kategori → tipe → nama → varian → harga
-- Product variants — wadah/ukuran per item (gelas kopi, cangkir, gelas es, dll)
-- Tipe produk — own vs konsinyasi
-- Excel import — dynamic column mapping, preview before import
-- Manual DB input — with duplicate handling and overwrite option
-- Anti-corrupt DB — JSONDecodeError recovery with .bak backup
-- NTP cache — sync offset once, reuse for efficiency, `force_sync` option
-- Random 3-digit suffix on transaction ID (anti-guess)
-- Universal menu engine — reusable `menu()` function
-- Indonesian day names in header (Senin-Minggu)
-- `get_trx_harian()` now returns both pemasukan and pengeluaran
-- Sales detail sorted by transaction time
-- Item recap includes variant breakdown
-- Daily report with date input (Enter = today)
-- `pandas` + `openpyxl` added to dependencies
-- Separate DB files: DB_HARGA_WARUNG.json + DB_TRX_WARUNG.json
-
-### WMS v2.6
-- Global refactor — consistent style with POS v1.7
-- Added docstrings to all functions
-- Fixed `barang_keluar()` bug — stock limit now warning only, not blocking
-- Terminal-width adaptive display using `shutil.get_terminal_size()`
-- `menu_map` pattern for cleaner menu routing
-- Added `Press Enter...` feedback on invalid input
-
-### POS v1.7
-- Submenu Transaksi (Pemasukan/Pengeluaran) & Laporan (Daily/Detail/Recap) separated
-- Price lookup from DB_HARGA — keyword search with paginated results (5 per page)
-- ASCII art header via pyfiglet (`mini` font)
-- `trx_id_call()` refactored — merged into single function with `jenis` param
-- Counter reset bug fix — both counters reset correctly on date change
-- Helper functions extracted: `get_trx_harian()`, `hitung_total()`, `rekap_item()`, `item_terlaris()`, `list_pengeluaran()`
-- `header()` utility function — reusable report header
-- `menu_map.get()` pattern for cleaner menu routing
-- Added `pyfiglet` and `shutil` to dependencies
-
-### POS v1.6
-- NTP time server integration (`id.pool.ntp.org`) — Surabaya timezone (WIB UTC+7)
-- Fallback to local clock if NTP unavailable + warning display
-- `sumber_waktu` field added to every transaction (NTP / LOKAL)
-- Sales detail — lookup penjualan by date with per-transaction breakdown
-- Item recap — all items sold per day, sorted by quantity
-
-### POS v1.5
-- Refactor: simpan_transaksi() universal → save_trx()
-- Fix counter reset bug
-- Tambah tahun_aktif di counter DB
-- Daily Report — jumlah transaksi, item terlaris, list pengeluaran, laba kotor
-
-### POS v1.0
-- Income recording (Pemasukan) with multi-item support
-- Expense recording (Pengeluaran) with 5 categories
-- Unique transaction ID with anti-fraud timestamp encoding
-- Independent daily/weekly/monthly counters
-- Price sanity check (warns if price ≤ Rp100)
-- JSON persistence for all transactions
-
-### WMS v2.5
-- Code refactoring — descriptive function & variable names
-- Wrapped main loop into `main()` function
-- Fixed logic bug in `barang_keluar()`
-- Added `if __name__ == "__main__"` guard
-- Added `os.system("clear")` for cleaner display
-
-### WMS v2.0
-- JSON database persistence
-- Auto load / save database
-- Local inventory storage
-
-### WMS v1.0
-- Initial CLI warehouse management system
-- Stock in / stock out
-- Restock alert
-- CLI menu system
+> Dokumentasi tools CLI original sebelum NotaCore ERP PWA.
 
 ---
-
-## Author
-
-**Thery Vissabillillah**
-- SMK Accounting graduate with 5+ years warehouse/logistics experience
-- Building real-world Python tools from scratch — on mobile via Termux
-- Long-term goal: lightweight ERP for small businesses and UMKM
-
----
-
----
-
-# Versi Bahasa Indonesia
-
-# Python WMS + POS CLI
 
 Sistem **Manajemen Gudang (WMS)** dan **Point of Sale (POS)** berbasis CLI yang dibangun sepenuhnya dengan Python.
 

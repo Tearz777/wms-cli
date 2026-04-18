@@ -1,3 +1,19 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+
+# ERP Backend
+erp/backend/erp.db
+erp/backend/.env
+__pycache__/
+*.pyc
+
+# ERP Frontend
+erp/frontend/node_modules/
+erp/frontend/dist/
+
+# Upload temp
+erp_uploads/
+
+# OS
+.DS_Store

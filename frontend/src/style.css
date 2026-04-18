@@ -1,0 +1,11 @@
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+[data-bs-theme="dark"] .suggestion-item:hover {
+  background-color: #333;
+}
+
+[data-bs-theme="dark"] .bg-white {
+  background-color: #1e1e1e !important;
+}

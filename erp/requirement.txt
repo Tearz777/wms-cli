@@ -1,0 +1,19 @@
+# Core
+fastapi
+uvicorn
+python-dotenv
+
+# Database
+sqlalchemy
+alembic
+aiosqlite
+
+# Auth
+python-jose[cryptography]
+passlib[bcrypt]
+pydantic[email]==1.10.21
+pydantic-settings
+
+# Import support
+openpyxl
+pandas
