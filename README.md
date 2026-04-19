@@ -110,7 +110,7 @@ ERP v2.0     📋 Planned
 
 ## 👤 About the Developer
 
-###Thery Vissabillillah
+### Thery Vissabillillah
 
 * Background in accounting with 5+ years in warehouse & logistics
 * Builds systems from real operational problems, not theory
