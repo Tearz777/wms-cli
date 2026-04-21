@@ -9,6 +9,9 @@
       <div class="d-flex align-items-center gap-2">
         <span class="small text-muted">{{ auth.user?.full_name }}</span>
         <span class="badge bg-primary">{{ auth.user?.role }}</span>
+        <span v-if="currentShift" class="badge bg-info ms-1">
+            🕐 {{ currentShift.name }}
+        </span>
         <div class="form-check form-switch mb-0">
           <input class="form-check-input" type="checkbox" role="switch"
             :checked="isDark" @change="toggleTheme" />
@@ -47,6 +50,11 @@
           </RouterLink>
         </li>
 	<li v-if="auth.isAdmin || auth.isOwner" class="nav-item">
+	  <RouterLink to="/settings" class="nav-link" :class="isDark ? 'text-white' : ''">
+	    ⚙️ Settings
+	  </RouterLink>
+	</li>
+	<li v-if="auth.isAdmin || auth.isOwner" class="nav-item">
 	  <RouterLink to="/users" class="nav-link" :class="isDark ? 'text-white' : ''">
    	    👥 Users
  	  </RouterLink>
@@ -63,13 +71,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import api from '@/utils/api'
 
 const auth = useAuthStore()
 const router = useRouter()
 const isDark = ref(localStorage.getItem('theme') === 'dark')
+
+const currentShift = ref(null)
+
+async function loadCurrentShift() {
+  try {
+    const res = await api.get('/settings/current-shift')
+    currentShift.value = res.data.shift
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+onMounted(loadCurrentShift)
 
 document.documentElement.setAttribute(
   'data-bs-theme',

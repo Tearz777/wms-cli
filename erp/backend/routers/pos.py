@@ -13,6 +13,9 @@ from dependencies import get_current_user, require_role
 from services.smart_parser import extract_smart_input
 from services.accounting import create_journal_from_transaction
 from datetime import datetime, timezone, timedelta
+from services.invoice_generator import generate_invoice_number
+from typing import Optional
+from datetime import datetime, timezone, timedelta, date
 
 
 router = APIRouter(prefix="/pos", tags=["POS"])
@@ -24,7 +27,13 @@ WIB = timezone(timedelta(hours=7))
 def generate_trx_id(type: str) -> str:
     now = datetime.now(WIB)
     prefix = "TRX" if type == "pemasukan" else "TRXK"
-    return f"{prefix}-{now.strftime('%y%m%d-%H%M')}-{now.microsecond % 1000:03d}"
+    return f"{prefix}-{now.strftime('%y%d%m-%M%H')}-{now.microsecond % 1000:03d}"
+
+def format_time(dt):
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(WIB).strftime("%d/%m/%Y %H:%M")
+
 
 # ── PEMASUKAN ─────────────────────────────────────
 @router.post("/pemasukan", response_model=TransactionResponse)
@@ -71,9 +80,13 @@ async def create_pemasukan(
                 price = first_variant.price
                 variant_name = first_variant.container
                 variant = first_variant
-
+        # Validasi stok
+        if product.stock < item.qty:
+            raise HTTPException(status_code=400, detail=f"Stok {product.name} tidak cukup. Stok tersedia: {product.stock}")
+	            
         subtotal = price * item.qty
         total += subtotal
+
 
         item_records.append({
             "product": product,
@@ -89,8 +102,13 @@ async def create_pemasukan(
         total += data.extra_amount
 
     # Buat transaksi
+    trx_id = await generate_invoice_number(db, "pemasukan")
+    if not trx_id:
+        raise HTTPException(
+        status_code=400,
+        detail="Format invoice belum dikonfigurasi. Silakan atur di Settings → Invoice Format.")
     trx = Transaction(
-        trx_id=generate_trx_id("pemasukan"),
+        trx_id=trx_id,
         type="pemasukan",
         cashier_id=current_user.id,
         total=total,
@@ -129,7 +147,7 @@ async def create_pemasukan(
         "total": trx.total,
         "note": trx.note,
         "time_source": trx.time_source,
-        "created_at": str(trx.created_at),
+        "created_at": format_time(trx.created_at),
         "items": trx.items
     }
 
@@ -164,8 +182,15 @@ async def create_pengeluaran(
             )
             db.add(movement)
 
+
+    trx_id = await generate_invoice_number(db, "pengeluaran")
+    if not trx_id:
+        raise HTTPException(
+        status_code=400,
+        detail="Format invoice belum dikonfigurasi. Silakan atur di Settings → Invoice Format.")
+
     trx = Transaction(
-        trx_id=generate_trx_id("pengeluaran"),
+        trx_id=trx_id,
         type="pengeluaran",
         cashier_id=current_user.id,
         total=data.amount,
@@ -190,22 +215,49 @@ async def create_pengeluaran(
         "total": trx.total,
         "note": trx.note,
         "time_source": trx.time_source,
-        "created_at": str(trx.created_at),
+        "created_at": format_time(trx.created_at),
         "items": trx.items
     }
 
 # ── GET transaksi ─────────────────────────────────
 @router.get("/transactions", response_model=List[TransactionResponse])
 async def get_transactions(
+    filter: Optional[str] = "all",
+    start_date: Optional[str] = None,  # YYYY-MM-DD
+    end_date: Optional[str] = None,    # YYYY-MM-DD
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    result = await db.execute(
-        select(Transaction)
-        .options(selectinload(Transaction.items))
-        .order_by(Transaction.created_at.desc())
-    )
+    now = datetime.now(WIB)
+    query = select(Transaction).options(selectinload(Transaction.items))
+
+    # Custom range prioritas kalau ada
+    if start_date and end_date:
+        start = datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=WIB)
+        end = datetime.strptime(end_date, "%Y-%m-%d").replace(
+            hour=23, minute=59, second=59, tzinfo=WIB
+        )
+        query = query.where(Transaction.created_at >= start.astimezone(timezone.utc))
+        query = query.where(Transaction.created_at <= end.astimezone(timezone.utc))
+
+    elif filter == "today":
+        start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        query = query.where(Transaction.created_at >= start.astimezone(timezone.utc))
+    elif filter == "week":
+        start = now - timedelta(days=now.weekday())
+        start = start.replace(hour=0, minute=0, second=0, microsecond=0)
+        query = query.where(Transaction.created_at >= start.astimezone(timezone.utc))
+    elif filter == "month":
+        start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        query = query.where(Transaction.created_at >= start.astimezone(timezone.utc))
+    elif filter == "year":
+        start = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+        query = query.where(Transaction.created_at >= start.astimezone(timezone.utc))
+
+    query = query.order_by(Transaction.created_at.desc())
+    result = await db.execute(query)
     transactions = result.scalars().all()
+
     return [
         {
             "id": t.id,
@@ -214,11 +266,12 @@ async def get_transactions(
             "total": t.total,
             "note": t.note,
             "time_source": t.time_source,
-            "created_at": str(t.created_at),
+            "created_at": format_time(t.created_at),
             "items": t.items
         }
         for t in transactions
     ]
+
 
 # ── VOID transaksi ────────────────────────────────
 @router.delete("/transactions/{trx_id}")

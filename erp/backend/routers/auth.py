@@ -8,21 +8,33 @@ from schemas.auth import UserCreate, UserLogin, TokenResponse, UserResponse
 from utils.security import hash_password, verify_password, create_access_token
 from dependencies import get_current_user
 from typing import List
+import re
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
+def validate_username(username: str) -> str:
+    username = username.lower().strip()
+    if len(username) < 3:
+        raise ValueError("Username minimal 3 karakter")
+    if not re.match(r'^[a-z0-9][a-z0-9._-]*[a-z0-9]$', username) and len(username) > 1:
+        raise ValueError("Username tidak boleh diakhiri tanda baca")
+    if not re.match(r'^[a-z0-9._-]+$', username):
+        raise ValueError("Username hanya boleh huruf, angka, titik, strip, underscore")
+    return username
+
 @router.post("/register", response_model=UserResponse)
 async def register(data: UserCreate, db: AsyncSession = Depends(get_db)):
-    # Cek username sudah ada
-    result = await db.execute(select(User).where(User.username == data.username))
+    try:
+        username = validate_username(data.username)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    result = await db.execute(select(User).where(User.username == username))
     if result.scalar_one_or_none():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username sudah dipakai"
-        )
+        raise HTTPException(status_code=400, detail="Username sudah dipakai")
 
     user = User(
-        username=data.username,
+        username=username,
         full_name=data.full_name,
         password_hash=hash_password(data.password),
         role=data.role
@@ -34,7 +46,8 @@ async def register(data: UserCreate, db: AsyncSession = Depends(get_db)):
 
 @router.post("/login", response_model=TokenResponse)
 async def login(data: UserLogin, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).where(User.username == data.username))
+    username = data.username.lower().strip()
+    result = await db.execute(select(User).where(User.username == username))
     user = result.scalar_one_or_none()
 
     if not user or not verify_password(data.password, user.password_hash):

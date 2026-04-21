@@ -172,7 +172,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="trx in transactions" :key="trx.id">
+                <tr v-for="trx in transactions" :key="trx.id"
+                  @click="showDetail(trx)"
+                  style="cursor: pointer">
                 <td class="small font-monospace">{{ trx.trx_id }}</td>
                 <td>
                   <span :class="trx.type === 'pemasukan' ? 'badge bg-success' : 'badge bg-danger'">
@@ -194,6 +196,58 @@
       </div>
     </div>
 
+    <!-- Modal Detail Transaksi -->
+    <div v-if="selectedTrx" class="modal d-block" style="background: rgba(0,0,0,0.5)" @click.self="selectedTrx = null">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title font-monospace">{{ selectedTrx.trx_id }}</h6>
+            <button class="btn-close" @click="selectedTrx = null"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3 small text-muted">
+              <span>{{ selectedTrx.created_at }}</span>
+              <span class="ms-2">
+                <span :class="selectedTrx.type === 'pemasukan' ? 'badge bg-success' : 'badge bg-danger'">
+                  {{ selectedTrx.type }}
+                </span>
+              </span>
+            </div>
+            <table v-if="selectedTrx.items.length" class="table table-sm mb-3">
+              <thead>
+                <tr>
+                  <th>Produk</th>
+                  <th>Varian</th>
+                  <th>Qty</th>
+                  <th>Harga</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in selectedTrx.items" :key="item.id">
+                  <td>{{ item.product_name }}</td>
+                  <td class="text-muted small">{{ item.variant_name }}</td>
+                  <td>{{ item.qty }}</td>
+                  <td>Rp{{ item.price.toLocaleString('id-ID') }}</td>
+                  <td>Rp{{ item.subtotal.toLocaleString('id-ID') }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div v-if="selectedTrx.note" class="small text-muted mb-2">
+              📝 {{ selectedTrx.note }}
+            </div>
+            <div class="fw-bold text-end">
+              Total: Rp{{ selectedTrx.total.toLocaleString('id-ID') }}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-sm btn-secondary" @click="selectedTrx = null">Tutup</button>
+            <button class="btn btn-sm btn-outline-primary" @click="printStruk(selectedTrx)">🖨️ Print Struk</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -206,6 +260,15 @@ const auth = useAuthStore()
 const tab = ref('pemasukan')
 const saving = ref(false)
 const loadingTrx = ref(false)
+const selectedTrx = ref(null)
+
+function showDetail(trx) {
+  selectedTrx.value = trx
+}
+
+function printStruk(trx) {
+  alert('Print struk coming soon!')
+}
 
 // Pemasukan
 const productSearch = ref('')
