@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 from config import settings
 from routers import auth, wms, pos, accounting, importer
+from routers import settings as settings_router
 import models
 
 @asynccontextmanager
@@ -22,6 +23,7 @@ app.include_router(accounting.router)
 app.include_router(pos.router)
 app.include_router(importer.router)
 app.include_router(wms.router)
+app.include_router(settings_router.router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

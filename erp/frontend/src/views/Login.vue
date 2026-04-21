@@ -80,7 +80,9 @@ const bgClass = computed(() =>
 )
 
 onMounted(() => {
-  isDark.value = document.documentElement.classList.contains('dark')
+  const savedTheme = localStorage.getItem('theme') || 'light'
+  isDark.value = savedTheme === 'dark'
+  document.documentElement.setAttribute('data-bs-theme', savedTheme)
 })
 
 const toggleDark = () => {

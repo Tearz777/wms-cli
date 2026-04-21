@@ -14,6 +14,12 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
+  	path: 'settings',
+  	name: 'Settings',
+  	component: () => import('@/views/Settings.vue'),
+  	meta: { adminOnly: true }
+	},
+      {
         path: '',
         name: 'Dashboard',
         component: () => import('@/views/Dashboard.vue')
