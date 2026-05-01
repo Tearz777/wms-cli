@@ -24,6 +24,12 @@ const routes = [
         name: 'Dashboard',
         component: () => import('@/views/Dashboard.vue')
       },
+      {
+        path: 'payment',
+        name: 'Payment',
+        component: () => import('@/views/Payment.vue'),
+        meta: { adminOnly: true }
+      },
       // WMS
       {
         path: 'wms',

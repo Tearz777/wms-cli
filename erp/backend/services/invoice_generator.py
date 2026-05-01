@@ -17,7 +17,7 @@ PLACEHOLDERS = {
     "{RANDOM}": lambda now: str(random.randint(100, 999)),
 }
 
-async def get_setting(db: AsyncSession, key: str) -> str | None:
+async def get_setting(db: AsyncSession, key: str, default: str = "") -> str | None:
     result = await db.execute(select(Setting).where(Setting.key == key))
     setting = result.scalar_one_or_none()
     return setting.value if setting else None

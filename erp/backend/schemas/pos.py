@@ -1,11 +1,15 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 
-# ── ITEMS ─────────────────────────────────────────
+
+# ────────────────────────────────────────────────
+# ITEMS
+# ────────────────────────────────────────────────
 class TransactionItemCreate(BaseModel):
     product_id: int
     variant_id: Optional[int] = None
     qty: int
+
 
 class TransactionItemResponse(BaseModel):
     id: int
@@ -18,29 +22,55 @@ class TransactionItemResponse(BaseModel):
     class Config:
         from_attributes = True
 
-# ── PEMASUKAN ─────────────────────────────────────
+
+# ────────────────────────────────────────────────
+# PEMASUKAN
+# ────────────────────────────────────────────────
 class PemasukanCreate(BaseModel):
-    items: Optional[List[TransactionItemCreate]] = []
-    extra_amount: Optional[int] = 0       # untuk lain-lain
-    extra_note: Optional[str] = None      # keterangan lain-lain
+    # daftar item transaksi
+    items: List[TransactionItemCreate] = Field(default_factory=list)
+
+    # tambahan biaya / jasa / lain-lain
+    extra_amount: int = 0
+    extra_note: Optional[str] = None
+
+    # pembayaran
+    cash_received: int = 0
+    customer_id: Optional[int] = None
+    payment_method: str = "cash"   # cash | qris | hutang
+
+    # catatan umum
     note: Optional[str] = None
 
-# ── PENGELUARAN ───────────────────────────────────
+
+# ────────────────────────────────────────────────
+# PENGELUARAN
+# ────────────────────────────────────────────────
 class PengeluaranCreate(BaseModel):
     category: str   # konsumsi_karyawan | bayar_konsinyasi | operasional | lain_lain
     amount: int
-    note: str       # wajib ada keterangan
+    note: str
 
-# ── RESPONSE ──────────────────────────────────────
+
+# ────────────────────────────────────────────────
+# RESPONSE ITEM
+# ────────────────────────────────────────────────
 class TransactionResponse(BaseModel):
     id: int
     trx_id: str
     type: str
     total: int
+
     note: Optional[str] = None
     time_source: str
     created_at: str
-    items: List[TransactionItemResponse] = []
+
+    cash_received: int = 0
+    payment_method: str = "cash"
+    customer_id: Optional[int] = None
+    cashier_name: Optional[str] = None
+
+    items: List[TransactionItemResponse] = Field(default_factory=list)
 
     class Config:
         from_attributes = True

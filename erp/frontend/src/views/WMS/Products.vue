@@ -25,44 +25,52 @@
     <!-- Table -->
     <div v-else class="card">
       <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-          <thead>
-            <tr>
-              <th>Nama</th>
-              <th>Kategori</th>
-              <th>Tipe</th>
-              <th>Stok</th>
-              <th>Lokasi</th>
-              <th>Varian</th>
-              <th v-if="auth.isAdmin || auth.isOwner">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="p in filtered" :key="p.id">
-              <td class="fw-semibold">{{ p.name }}</td>
-              <td><span class="badge bg-secondary">{{ p.category }}</span></td>
-              <td><span :class="p.ownership === 'own' ? 'badge bg-success' : 'badge bg-warning text-dark'">{{ p.ownership }}</span></td>
-              <td>{{ p.stock }}</td>
-              <td class="text-muted small">{{ p.location }}</td>
-              <td>
-                <span v-for="v in p.variants" :key="v.id" class="badge bg-light text-dark me-1 small">
-                  {{ v.container }} - Rp{{ v.price.toLocaleString('id-ID') }}
-                </span>
-              </td>
-              <td v-if="auth.isAdmin || auth.isOwner">
-                <button class="btn btn-sm btn-outline-primary me-1" @click="editProduct(p)">✏️</button>
-                <button class="btn btn-sm btn-outline-warning me-1" @click="deactivate(p.id)">🚫</button>
-                <button v-if="auth.isOwner" class="btn btn-sm btn-outline-danger" @click="deleteProduct(p.id)">🗑️</button>
-              </td>
-            </tr>
-            <tr v-if="filtered.length === 0">
-              <td colspan="7" class="text-center text-muted">Tidak ada produk</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Stok</th>
+                <th class="d-none d-md-table-cell">Kategori</th>
+                <th class="d-none d-md-table-cell">Tipe</th>
+                <th class="d-none d-md-table-cell">Lokasi</th>
+                <th class="d-none d-md-table-cell">Varian</th>
+                <th v-if="auth.isAdmin || auth.isOwner">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="p in filtered" :key="p.id">
+                <td class="fw-semibold">{{ p.name }}</td>
+                  <td>{{ p.stock }}</td>
+                  <td class="d-none d-md-table-cell">
+                  <span class="badge bg-secondary">{{ p.category }}</span>
+                </td>
+                <td class="d-none d-md-table-cell">
+                  <span :class="p.ownership === 'own' ? 'badge bg-success' : 'badge bg-warning text-dark'">
+                    {{ p.ownership }}
+                  </span>
+                </td>
+                <td class="d-none d-md-table-cell text-muted small">{{ p.location }}</td>
+                <td class="d-none d-md-table-cell">
+                  <span v-for="v in p.variants" :key="v.id" class="badge bg-light text-dark me-1 small">
+                    {{ v.container }} - Rp{{ v.price.toLocaleString('id-ID') }}
+                  </span>
+                </td>
+                <td v-if="auth.isAdmin || auth.isOwner">
+                  <button class="btn btn-sm btn-outline-primary me-1" @click="editProduct(p)">✏️</button>
+                  <button class="btn btn-sm btn-outline-warning me-1" @click="deactivate(p.id)">🚫</button>
+                  <button v-if="auth.isOwner" class="btn btn-sm btn-outline-danger" @click="deleteProduct(p.id)">🗑️</button>
+                </td>
+              </tr>
+              <tr v-if="filtered.length === 0">
+                <td colspan="7" class="text-center text-muted">Tidak ada produk</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-
+    
     <!-- Modal Tambah/Edit -->
     <div v-if="showModal" class="modal d-block" style="background: rgba(0,0,0,0.5)">
       <div class="modal-dialog">
