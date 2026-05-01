@@ -18,3 +18,4 @@ erp_uploads/
 # OS
 .DS_Store
 python-wms-cli/
+notebooks/
